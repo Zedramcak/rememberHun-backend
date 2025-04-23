@@ -1,7 +1,6 @@
 package cz.adamzrcek.controller;
 
 import cz.adamzrcek.dtos.ErrorResponse;
-import cz.adamzrcek.exception.ConnectionNotFoundException;
 import cz.adamzrcek.exception.EmailAlreadyExistsException;
 import cz.adamzrcek.exception.InvalidPasswordException;
 import cz.adamzrcek.exception.NotAllowedException;

@@ -1,7 +1,6 @@
 package cz.adamzrcek.entity;
 
 import cz.adamzrcek.entity.enums.WishlistCategory;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;

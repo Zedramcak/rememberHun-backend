@@ -1,7 +1,6 @@
 package cz.adamzrcek.entity;
 
 import cz.adamzrcek.entity.enums.PreferencesCategory;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;

@@ -1,7 +1,7 @@
 package cz.adamzrcek.startup;
 
-import cz.adamzrcek.entity.enums.Role;
 import cz.adamzrcek.entity.User;
+import cz.adamzrcek.entity.enums.Role;
 import cz.adamzrcek.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
