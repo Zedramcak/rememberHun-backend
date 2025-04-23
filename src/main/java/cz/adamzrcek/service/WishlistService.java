@@ -96,10 +96,6 @@ public class WishlistService {
         return wishlistItem;
     }
 
-    private boolean isFulfilled(WishlistItem wishlistItem) {
-        return wishlistItem.isFulfilled();
-    }
-
     private WishlistItemDto convertToDto(WishlistItem wishlistItem) {
         return new WishlistItemDto(wishlistItem.getId(), wishlistItem.getTitle(), wishlistItem.getDescription(), wishlistItem.getCategory(), wishlistItem.isFulfilled(), wishlistItem.getCreatedAt());
     }

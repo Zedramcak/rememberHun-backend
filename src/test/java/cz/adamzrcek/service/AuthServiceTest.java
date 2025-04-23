@@ -128,7 +128,6 @@ class AuthServiceTest {
     @Test
     public void userLoginFailTest(){
         var loginRequest = new LoginRequest("username", "password");
-        var user = TestUserFactory.basicUser();
 
         assertThrows(UserNotFoundException.class, () -> authService.login(loginRequest));
 
