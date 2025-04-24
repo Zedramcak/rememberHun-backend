@@ -27,7 +27,7 @@ import java.time.LocalDateTime;
 @Setter
 public class Connection {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -41,6 +41,4 @@ public class Connection {
     private LocalDateTime created_at;
     @Enumerated(EnumType.STRING)
     private ConnectionStatus status;
-
-
 }
