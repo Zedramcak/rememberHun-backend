@@ -3,6 +3,8 @@ package cz.adamzrcek.dtos.user;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.time.LocalDate;
+
 @Data
 @AllArgsConstructor
 public class UserResponse {
@@ -10,4 +12,7 @@ public class UserResponse {
     private String username;
     private String email;
     private String role;
+    private String firstName;
+    private String lastName;
+    private LocalDate birthDate;
 }

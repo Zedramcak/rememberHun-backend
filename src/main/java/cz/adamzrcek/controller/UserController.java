@@ -31,7 +31,10 @@ public class UserController {
                 user.getId(),
                 user.getUsername(),
                 user.getEmail(),
-                user.getRole().name()
+                user.getRole().name(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getBirthDate()
         );
 
         return ResponseEntity.ok(response);
