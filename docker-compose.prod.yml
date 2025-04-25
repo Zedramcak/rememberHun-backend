@@ -1,0 +1,11 @@
+services:
+  app:
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+    env_file:
+      - .env.prod
+    ports:
+      - "8080:8080"
+    restart: always
+
+

@@ -1,0 +1,8 @@
+services:
+  app:
+    build: .
+    networks:
+      - rememberhun-network
+
+networks:
+  rememberhun-network:
