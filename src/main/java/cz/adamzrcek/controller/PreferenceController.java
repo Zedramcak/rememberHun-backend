@@ -2,7 +2,7 @@ package cz.adamzrcek.controller;
 
 import cz.adamzrcek.dtos.preference.PreferenceDto;
 import cz.adamzrcek.dtos.preference.PreferenceNewRequest;
-import cz.adamzrcek.entity.enums.PreferencesCategory;
+import cz.adamzrcek.entity.PreferenceCategory;
 import cz.adamzrcek.service.PreferenceService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -38,28 +38,14 @@ public class PreferenceController {
         return ResponseEntity.ok(preferenceService.getPreference(id));
     }
 
-    @Operation(summary = "List all categories", responses = {
-            @ApiResponse(responseCode = "200", description = "OK"),
-    })
-    @GetMapping("/categories")
-    public ResponseEntity<List<String>> listCategories(){
-        return ResponseEntity.ok(preferenceService.listCategories());
-    }
-
     @GetMapping("/list")
     public ResponseEntity<List<PreferenceDto>> listPreferences(){
         return ResponseEntity.ok(preferenceService.getAllPreferencesForSignedUser());
     }
 
     @GetMapping("/list/{category}")
-    public ResponseEntity<List<PreferenceDto>> listPreferencesByCategory(@PathVariable String category) throws BadRequestException {
-        PreferencesCategory categoryEnum;
-        try {
-            categoryEnum = PreferencesCategory.valueOf(category.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            throw new BadRequestException("Invalid category: " + category);
-        }
-        return ResponseEntity.ok(preferenceService.getAllPreferencesForSignedUserByCategory(categoryEnum));
+    public ResponseEntity<List<PreferenceDto>> listPreferencesByCategory(@PathVariable Long category){
+        return ResponseEntity.ok(preferenceService.getAllPreferencesForSignedUserByCategory(category));
     }
 
     @GetMapping("/list/connection")
@@ -68,14 +54,8 @@ public class PreferenceController {
     }
 
     @GetMapping("/list/connection/{category}")
-    public ResponseEntity<List<PreferenceDto>> listPreferencesForConnectionByCategory(@PathVariable String category) throws BadRequestException {
-        PreferencesCategory categoryEnum;
-        try {
-            categoryEnum = PreferencesCategory.valueOf(category.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            throw new BadRequestException("Invalid category: " + category);
-        }
-        return ResponseEntity.ok(preferenceService.getPartnerPreferencesByCategory(categoryEnum));
+    public ResponseEntity<List<PreferenceDto>> listPreferencesForConnectionByCategory(@PathVariable Long category) {
+        return ResponseEntity.ok(preferenceService.getPartnerPreferencesByCategory(category));
     }
 
     @PostMapping

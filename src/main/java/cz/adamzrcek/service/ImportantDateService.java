@@ -5,18 +5,24 @@ import cz.adamzrcek.dtos.importantDate.ImportantDateDto;
 import cz.adamzrcek.dtos.importantDate.ImportantDateRequest;
 import cz.adamzrcek.entity.Connection;
 import cz.adamzrcek.entity.ImportantDate;
+import cz.adamzrcek.entity.ImportantDateCategory;
 import cz.adamzrcek.exception.NotAllowedException;
+import cz.adamzrcek.exception.ResourceNotFoundException;
 import cz.adamzrcek.repository.ConnectionRepository;
+import cz.adamzrcek.repository.ImportantDateCategoryRepository;
 import cz.adamzrcek.repository.ImportantDateRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ImportantDateService {
     private final ImportantDateRepository importantDateRepository;
+    private final ImportantDateCategoryRepository importantDateCategoryRepository;
     private final ConnectionService connectionService;
     private final ConnectionRepository connectionRepository;
 
@@ -27,7 +33,7 @@ public class ImportantDateService {
                 .title(request.title())
                 .note(request.note())
                 .date(request.date())
-                .type(request.type())
+                .category(importantDateCategoryRepository.findById(request.typeId()).orElseThrow(() -> new ResourceNotFoundException("Important date category with id " + request.typeId() + " not found")))
                 .shouldBeNotified(request.shouldBeNotified())
                 .connection(connection)
                 .build();
@@ -53,7 +59,8 @@ public class ImportantDateService {
         date.setTitle(request.title());
         date.setNote(request.note());
         date.setDate(request.date());
-        date.setType(request.type());
+        date.setCategory(importantDateCategoryRepository.findById(request.typeId())
+                .orElseThrow(() -> new ResourceNotFoundException("Important date category with id " + request.typeId() + " not found")));
         date.setShouldBeNotified(request.shouldBeNotified());
 
         return toDto(importantDateRepository.save(date));
@@ -95,8 +102,13 @@ public class ImportantDateService {
                 importantDate.getTitle(),
                 importantDate.getNote(),
                 importantDate.getDate(),
-                importantDate.getType(),
+                importantDate.getCategory().getName(),
                 importantDate.isShouldBeNotified()
         );
+    }
+
+    public Map<Long, String> getAllCategoriesAsMap() {
+        List<ImportantDateCategory> categories =  importantDateCategoryRepository.findAll();
+        return categories.stream().collect(Collectors.toMap(ImportantDateCategory::getId, ImportantDateCategory::getName));
     }
 }

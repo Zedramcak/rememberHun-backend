@@ -1,12 +1,10 @@
 package cz.adamzrcek.entity;
 
-import cz.adamzrcek.entity.enums.PreferencesCategory;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,7 +25,10 @@ public class Preference {
 
     @ManyToOne
     private User user;
-    @Enumerated(EnumType.STRING)
-    private PreferencesCategory category;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private PreferenceCategory category;
+
     private String value;
 }

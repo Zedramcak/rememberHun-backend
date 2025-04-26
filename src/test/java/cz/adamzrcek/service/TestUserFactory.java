@@ -1,7 +1,7 @@
 package cz.adamzrcek.service;
 
+import cz.adamzrcek.entity.Role;
 import cz.adamzrcek.entity.User;
-import cz.adamzrcek.entity.enums.Role;
 
 public class TestUserFactory {
     public static User basicUser() {
@@ -9,7 +9,7 @@ public class TestUserFactory {
         user.setUsername("username");
         user.setEmail("email@email.com");
         user.setPassword("password");
-        user.setRole(Role.USER);
+        user.setRole(new Role(1L, "USER"));
         return user;
     }
 }

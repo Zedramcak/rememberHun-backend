@@ -1,7 +1,7 @@
 package cz.adamzrcek.startup;
 
 import cz.adamzrcek.entity.User;
-import cz.adamzrcek.entity.enums.Role;
+import cz.adamzrcek.repository.RoleRepository;
 import cz.adamzrcek.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +17,7 @@ public class AdminAccountInitializer {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
 
     @Value("${ADMIN_EMAIL}")
     private String adminEmail;
@@ -37,7 +38,7 @@ public class AdminAccountInitializer {
                     .email(adminEmail)
                     .password(passwordEncoder.encode(adminPassword))
                     .username(adminUsername)
-                    .role(Role.valueOf(adminRole))
+                    .role(roleRepository.findByName(adminRole))
                     .build();
             userRepository.save(admin);
             log.info("✅ Default admin account created (email: {})", adminEmail);

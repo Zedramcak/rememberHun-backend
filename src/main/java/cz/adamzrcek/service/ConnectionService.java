@@ -1,5 +1,6 @@
 package cz.adamzrcek.service;
 
+import cz.adamzrcek.dtos.ConnectionStatusDto;
 import cz.adamzrcek.dtos.connection.ConnectionAcceptRequest;
 import cz.adamzrcek.dtos.connection.ConnectionDeleteRequest;
 import cz.adamzrcek.dtos.connection.ConnectionDto;
@@ -7,29 +8,29 @@ import cz.adamzrcek.dtos.connection.ConnectionNewRequest;
 import cz.adamzrcek.dtos.connection.ConnectionSignedUserResponse;
 import cz.adamzrcek.dtos.user.UserDto;
 import cz.adamzrcek.entity.Connection;
+import cz.adamzrcek.entity.ConnectionStatus;
 import cz.adamzrcek.entity.User;
-import cz.adamzrcek.entity.enums.ConnectionStatus;
 import cz.adamzrcek.exception.ConnectionNotFoundException;
 import cz.adamzrcek.exception.NotAllowedException;
 import cz.adamzrcek.repository.ConnectionRepository;
+import cz.adamzrcek.repository.ConnectionStatusRepository;
 import cz.adamzrcek.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @Slf4j
+@AllArgsConstructor
 public class ConnectionService {
 
     private final ConnectionRepository connectionRepository;
+    private final ConnectionStatusRepository connectionStatusRepository;
     private final UserService userService;
     private final UserRepository userRepository;
-
-    public ConnectionService(ConnectionRepository connectionRepository, UserService userService, UserRepository userRepository) {
-        this.connectionRepository = connectionRepository;
-        this.userService = userService;
-        this.userRepository = userRepository;
-    }
 
     public ConnectionDto createNewConnection(ConnectionNewRequest request) {
         User currentUser = userService.getCurrentUser();
@@ -53,7 +54,7 @@ public class ConnectionService {
         Connection newConnection = Connection.builder()
                 .user1(currentUser)
                 .user2(userToConnect)
-                .status(ConnectionStatus.PENDING)
+                .connectionStatus(connectionStatusRepository.findByStatus("PENDING"))
                 .build();
 
         log.debug("New connection created for users {} and {}", currentUser.getUsername(), userToConnect.getUsername());
@@ -67,7 +68,7 @@ public class ConnectionService {
                 toUserDto(connection.getUser1()),
                 toUserDto(connection.getUser2()),
                 connection.getCreated_at(),
-                connection.getStatus()
+                connection.getConnectionStatus().getStatus()
         );
     }
 
@@ -86,7 +87,7 @@ public class ConnectionService {
             throw new NotAllowedException("User is not allowed to accept this connection");
         }
 
-        connection.setStatus(ConnectionStatus.CONNECTED);
+        connection.setConnectionStatus(connectionStatusRepository.findByStatus("CONNECTED"));
 
         log.debug("User {} accepted connection with id {}", currentUser.getUsername(), connection.getId());
 
@@ -117,7 +118,7 @@ public class ConnectionService {
 
         log.debug("User {} requested deletion connection with id {}", currentUser.getUsername(), connection.getId());
 
-        connection.setStatus(ConnectionStatus.DELETED);
+        connection.setConnectionStatus(connectionStatusRepository.findByStatus("DELETED"));
 
         currentUser.setConnection(null);
         userRepository.save(currentUser);
@@ -146,6 +147,11 @@ public class ConnectionService {
                 connection.getId(),
                 toUserDto(connection.getUser1().equals(currentUser) ? connection.getUser2() : connection.getUser1()),
                 connection.getCreated_at(),
-                connection.getStatus());
+                connection.getConnectionStatus().getStatus());
+    }
+
+    public List<ConnectionStatusDto> getAllConnectionsStatusesAsMap() {
+        List<ConnectionStatus> statuses = connectionStatusRepository.findAll();
+        return statuses.stream().map(status -> new ConnectionStatusDto(status.getId(), status.getStatus())).toList();
     }
 }

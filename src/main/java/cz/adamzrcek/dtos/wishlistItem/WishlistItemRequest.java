@@ -1,6 +1,5 @@
 package cz.adamzrcek.dtos.wishlistItem;
 
-import cz.adamzrcek.entity.enums.WishlistCategory;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -9,5 +8,5 @@ import lombok.Data;
 public class WishlistItemRequest {
     private String title;
     private String description;
-    private WishlistCategory category;
+    private Long categoryId;
 }

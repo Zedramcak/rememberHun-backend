@@ -5,10 +5,10 @@ import cz.adamzrcek.dtos.authorization.LoginRequest;
 import cz.adamzrcek.dtos.authorization.RegisterRequest;
 import cz.adamzrcek.dtos.authorization.TokenRefreshRequest;
 import cz.adamzrcek.entity.User;
-import cz.adamzrcek.entity.enums.Role;
 import cz.adamzrcek.exception.EmailAlreadyExistsException;
 import cz.adamzrcek.exception.InvalidPasswordException;
 import cz.adamzrcek.exception.UserNotFoundException;
+import cz.adamzrcek.repository.RoleRepository;
 import cz.adamzrcek.repository.UserRepository;
 import cz.adamzrcek.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthService {
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
@@ -36,7 +37,7 @@ public class AuthService {
                 .firstName(registerRequest.getFirstName())
                 .lastName(registerRequest.getLastName())
                 .birthDate(registerRequest.getBirthDate())
-                .role(Role.USER)
+                .role(roleRepository.findByName("USER"))
                 .build();
 
         userRepository.save(user);
@@ -59,14 +60,14 @@ public class AuthService {
             throw new InvalidPasswordException("Invalid password");
         }
 
-        String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
+        String token = jwtUtil.generateToken(user.getEmail(), user.getRole().getName());
         String refreshToken = jwtUtil.generateRefreshToken(user.getEmail());
         log.info("User {} logged in", user.getUsername());
         return AuthResponse.builder()
                 .token(token)
                 .refreshToken(refreshToken)
                 .username(user.getUsername())
-                .role(user.getRole().name())
+                .role(user.getRole().getName())
                 .build();
     }
 
@@ -81,7 +82,7 @@ public class AuthService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
-        String newAccessToken = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
+        String newAccessToken = jwtUtil.generateToken(user.getEmail(), user.getRole().getName());
         String newRefreshToken = jwtUtil.generateRefreshToken(user.getEmail());
 
         log.info("User {} refreshed token", user.getUsername());
@@ -90,7 +91,7 @@ public class AuthService {
                 .token(newAccessToken)
                 .refreshToken(newRefreshToken)
                 .username(user.getUsername())
-                .role(user.getRole().name())
+                .role(user.getRole().getName())
                 .build();
     }
 }

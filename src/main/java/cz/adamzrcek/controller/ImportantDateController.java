@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/important-dates")
@@ -81,5 +82,16 @@ public class ImportantDateController {
     public ResponseEntity<Void> deleteImportantDate(@PathVariable Long id) {
         importantDateService.deleteImportantDate(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "List all categories", responses = {
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "500", description = "Internal Error")
+    })
+    @GetMapping("/category")
+    public ResponseEntity<Map<Long, String>> listCategories(){
+        Map<Long, String> response = importantDateService.getAllCategoriesAsMap();
+        return ResponseEntity.ok(response);
     }
 }

@@ -5,22 +5,22 @@ import cz.adamzrcek.dtos.wishlistItem.WishlistItemRequest;
 import cz.adamzrcek.entity.User;
 import cz.adamzrcek.entity.WishlistItem;
 import cz.adamzrcek.exception.NotAllowedException;
+import cz.adamzrcek.repository.WishlistCategoryRepository;
 import cz.adamzrcek.repository.WishlistRepository;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@AllArgsConstructor
+@Slf4j
 public class WishlistService {
     private final WishlistRepository wishlistRepository;
     private final UserService userService;
     private final ConnectionService connectionService;
-
-    public WishlistService(WishlistRepository wishlistRepository, UserService userService, ConnectionService connectionService) {
-        this.wishlistRepository = wishlistRepository;
-        this.userService = userService;
-        this.connectionService = connectionService;
-    }
+    private final WishlistCategoryRepository wishlistCategoryRepository;
 
     public WishlistItemDto getWishlistItem(Long id) {
         return convertToDto(findOwnWishlistItemOrThrow(id));
@@ -72,7 +72,9 @@ public class WishlistService {
         return WishlistItem.builder()
                 .title(request.getTitle())
                 .user(user)
-                .category(request.getCategory())
+                .category(
+                        wishlistCategoryRepository.findById(request.getCategoryId())
+                                .orElseThrow(() -> new IllegalArgumentException("Wishlist category with id " + request.getCategoryId() + " not found")))
                 .description(request.getDescription())
                 .build();
     }
@@ -80,7 +82,8 @@ public class WishlistService {
     private void updateWishlistItemFields(WishlistItemRequest request, WishlistItem wishlistItem) {
         wishlistItem.setTitle(request.getTitle());
         wishlistItem.setDescription(request.getDescription());
-        wishlistItem.setCategory(request.getCategory());
+        wishlistItem.setCategory(wishlistCategoryRepository.findById(request.getCategoryId())
+                .orElseThrow(() -> new IllegalArgumentException("Wishlist category with id " + request.getCategoryId() + " not found")));
     }
 
     private List<WishlistItemDto> getWishlistByUser(User user){
@@ -97,6 +100,6 @@ public class WishlistService {
     }
 
     private WishlistItemDto convertToDto(WishlistItem wishlistItem) {
-        return new WishlistItemDto(wishlistItem.getId(), wishlistItem.getTitle(), wishlistItem.getDescription(), wishlistItem.getCategory(), wishlistItem.isFulfilled(), wishlistItem.getCreatedAt());
+        return new WishlistItemDto(wishlistItem.getId(), wishlistItem.getTitle(), wishlistItem.getDescription(), wishlistItem.getCategory().getName(), wishlistItem.isFulfilled(), wishlistItem.getCreatedAt());
     }
 }

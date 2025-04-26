@@ -1,14 +1,15 @@
 package cz.adamzrcek.service;
 
+import cz.adamzrcek.dtos.preference.PreferenceDto;
 import cz.adamzrcek.dtos.preference.PreferenceNewRequest;
-import cz.adamzrcek.entity.enums.PreferencesCategory;
-import cz.adamzrcek.entity.enums.Role;
+import cz.adamzrcek.entity.Preference;
+import cz.adamzrcek.entity.PreferenceCategory;
+import cz.adamzrcek.entity.Role;
+import cz.adamzrcek.entity.User;
 import cz.adamzrcek.exception.NotAllowedException;
 import cz.adamzrcek.exception.PreferenceNotFoundException;
+import cz.adamzrcek.repository.PreferenceCategoryRepository;
 import cz.adamzrcek.repository.PreferenceRepository;
-import cz.adamzrcek.dtos.preference.PreferenceDto;
-import cz.adamzrcek.entity.Preference;
-import cz.adamzrcek.entity.User;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -35,6 +36,9 @@ public class PreferenceServiceTest {
     @Mock
     private ConnectionService connectionService;
 
+    @Mock
+    private PreferenceCategoryRepository preferenceCategoryRepository;
+
     @InjectMocks
     private PreferenceService preferenceService;
 
@@ -44,11 +48,13 @@ public class PreferenceServiceTest {
         User currentUser = User.builder()
                 .id(8L)
                 .username("username")
-                .role(Role.USER)
+                .role(new Role(1L, "USER"))
                 .build();
 
         when(preferenceRepository.findById(any())).thenReturn(Optional.of(Preference.builder().id(id).user(currentUser).build()));
         when(userService.getCurrentUser()).thenReturn(currentUser);
+        given(preferenceCategoryRepository.findById(any())).willReturn(Optional.of(new PreferenceCategory(1L, "BRAND")));
+
         PreferenceDto preferenceDto = preferenceService.getPreference(id);
 
         assertEquals(id, preferenceDto.id());
@@ -71,7 +77,7 @@ public class PreferenceServiceTest {
         User currentUser = User.builder()
                 .id(8L)
                 .username("username")
-                .role(Role.USER)
+                .role(new Role(1L, "USER"))
                 .build();
         User otherUser = TestUserFactory.basicUser();
         Preference currentUserPreference = Preference.builder().id(id).user(otherUser).build();
@@ -87,7 +93,7 @@ public class PreferenceServiceTest {
     public void createPreferenceOkTest() {
         User currentUser = TestUserFactory.basicUser();
         var request = new PreferenceNewRequest(
-                PreferencesCategory.BRAND,
+                1L,
                 "BRAND"
         );
 
@@ -97,10 +103,11 @@ public class PreferenceServiceTest {
                         Preference.builder()
                         .id(1L)
                         .user(currentUser)
-                        .category(request.getCategory())
+                        .category(new PreferenceCategory(1L, "BRAND"))
                         .value(request.getValue())
                         .build()
                 );
+        given(preferenceCategoryRepository.findById(any())).willReturn(Optional.of(new PreferenceCategory(1L, "BRAND")));
 
         PreferenceDto result = preferenceService.createPreference(request);
 
@@ -112,10 +119,10 @@ public class PreferenceServiceTest {
         Preference preference = preferenceArgumentCaptor.getValue();
 
         assertAll(
-                () -> assertEquals(request.getCategory(), result.category()),
+                () -> assertEquals(new PreferenceCategory(1L, "BRAND").getName(), result.category()),
                 () -> assertEquals(request.getValue(), result.value()),
                 () -> assertEquals(currentUser, preference.getUser()),
-                () -> assertEquals(request.getCategory(), preference.getCategory()),
+                () -> assertEquals(request.getCategoryId(), preference.getCategory().getId()),
                 () -> assertEquals(request.getValue(), preference.getValue())
         );
     }

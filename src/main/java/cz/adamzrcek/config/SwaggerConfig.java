@@ -32,7 +32,8 @@ import static io.swagger.v3.oas.models.security.SecurityScheme.Type.HTTP;
                 @Tag(name = "wishlist-controller", description = "Wishlist management"),
                 @Tag(name = "preference-controller", description = "User preferences"),
                 @Tag(name = "important-date-controller", description = "Important dates and events"),
-                @Tag(name = "connection-controller", description = "User connections and relationships")
+                @Tag(name = "connection-controller", description = "User connections and relationships"),
+                @Tag(name = "reference-data-controller", description = "Reference data")
         }
 )
 public class SwaggerConfig {

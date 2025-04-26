@@ -1,7 +1,5 @@
 package cz.adamzrcek.dtos.importantDate;
 
-import cz.adamzrcek.entity.enums.ImportantDateType;
-
 import java.time.LocalDate;
 
 public record ImportantDateDto(
@@ -9,6 +7,6 @@ public record ImportantDateDto(
         String title,
         String note,
         LocalDate date,
-        ImportantDateType type,
+        String type,
         boolean shouldBeNotified) {
 }

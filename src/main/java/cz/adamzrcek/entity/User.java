@@ -1,13 +1,11 @@
 package cz.adamzrcek.entity;
 
-import cz.adamzrcek.entity.enums.Role;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -31,16 +29,19 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    String firstName;
-    String lastName;
+    private String firstName;
+    private String lastName;
     @Column(unique = true)
-    String username;
-    String password;
-    LocalDate birthDate;
+    private String username;
+    private String password;
+    private LocalDate birthDate;
     @Column(unique = true)
-    String email;
-    @Enumerated( EnumType.STRING)
-    Role role;
+    private String email;
+
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
+
     @ManyToOne
     Connection connection;
 }

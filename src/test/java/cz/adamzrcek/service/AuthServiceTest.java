@@ -3,10 +3,12 @@ package cz.adamzrcek.service;
 import cz.adamzrcek.dtos.authorization.LoginRequest;
 import cz.adamzrcek.dtos.authorization.RegisterRequest;
 import cz.adamzrcek.dtos.authorization.TokenRefreshRequest;
+import cz.adamzrcek.entity.Role;
 import cz.adamzrcek.entity.User;
 import cz.adamzrcek.exception.EmailAlreadyExistsException;
 import cz.adamzrcek.exception.InvalidPasswordException;
 import cz.adamzrcek.exception.UserNotFoundException;
+import cz.adamzrcek.repository.RoleRepository;
 import cz.adamzrcek.repository.UserRepository;
 import cz.adamzrcek.security.JwtUtil;
 import org.junit.jupiter.api.Test;
@@ -38,6 +40,9 @@ class AuthServiceTest {
     private UserRepository userRepository;
 
     @Mock
+    RoleRepository roleRepository;
+
+    @Mock
     private JwtUtil jwtUtil;
 
 
@@ -46,6 +51,7 @@ class AuthServiceTest {
         var registerRequest = new RegisterRequest("username","email", "password", null, null, null);
         given(userRepository.findByEmail(anyString())).willReturn(java.util.Optional.empty());
         given(passwordEncoder.encode(anyString())).willReturn("password");
+        given(roleRepository.findByName(anyString())).willReturn(new Role(1L, "USER"));
 
         ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
 
@@ -59,7 +65,7 @@ class AuthServiceTest {
             () -> assertEquals(registerRequest.getUsername(), user.getUsername()),
             () -> assertEquals(registerRequest.getEmail(), user.getEmail()),
             () -> assertEquals("password", user.getPassword()),
-            () -> assertEquals("USER", user.getRole().name())
+            () -> assertEquals("USER", user.getRole().getName())
         );
     }
 

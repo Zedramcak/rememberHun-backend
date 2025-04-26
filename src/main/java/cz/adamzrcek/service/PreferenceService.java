@@ -4,10 +4,13 @@ import cz.adamzrcek.dtos.preference.PreferenceDto;
 import cz.adamzrcek.dtos.preference.PreferenceNewRequest;
 import cz.adamzrcek.entity.Preference;
 import cz.adamzrcek.entity.User;
-import cz.adamzrcek.entity.enums.PreferencesCategory;
+import cz.adamzrcek.entity.PreferenceCategory;
 import cz.adamzrcek.exception.NotAllowedException;
 import cz.adamzrcek.exception.PreferenceNotFoundException;
+import cz.adamzrcek.exception.ResourceNotFoundException;
+import cz.adamzrcek.repository.PreferenceCategoryRepository;
 import cz.adamzrcek.repository.PreferenceRepository;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -16,16 +19,12 @@ import java.util.List;
 
 @Slf4j
 @Service
+@AllArgsConstructor
 public class PreferenceService {
     private final PreferenceRepository preferenceRepository;
     private final UserService userService;
     private final ConnectionService connectionService;
-
-    public PreferenceService(PreferenceRepository preferenceRepository, UserService userService, ConnectionService connectionService) {
-        this.preferenceRepository = preferenceRepository;
-        this.userService = userService;
-        this.connectionService = connectionService;
-    }
+    private final PreferenceCategoryRepository preferenceCategoryRepository;
 
     public PreferenceDto getPreference(Long id){
         Preference preference = getPreferenceById(id);
@@ -37,7 +36,9 @@ public class PreferenceService {
         User currentUser = getCurrentUser();
 
         Preference preference = Preference.builder()
-                .category(request.getCategory())
+                .category(
+                        preferenceCategoryRepository.findById(request.getCategoryId())
+                                .orElseThrow(() -> new ResourceNotFoundException("Preference category with id " + request.getCategoryId() + " not found")))
                 .value(request.getValue())
                 .user(currentUser).build();
 
@@ -50,8 +51,8 @@ public class PreferenceService {
         return getAllPreferences(getCurrentUser());
     }
 
-    public List<PreferenceDto> getAllPreferencesForSignedUserByCategory(PreferencesCategory category){
-        return getAllPreferencesByCategory(category, getCurrentUser());
+    public List<PreferenceDto> getAllPreferencesForSignedUserByCategory(Long categoryId){
+        return getAllPreferencesByCategory(categoryId, getCurrentUser());
     }
 
     public List<PreferenceDto> getPartnerPreferences(){
@@ -59,9 +60,9 @@ public class PreferenceService {
         return getAllPreferences(partner);
     }
 
-    public List<PreferenceDto> getPartnerPreferencesByCategory(PreferencesCategory category){
+    public List<PreferenceDto> getPartnerPreferencesByCategory(Long categoryId){
         User partner = getConnectedPartner();
-        return getAllPreferencesByCategory(category, partner);
+        return getAllPreferencesByCategory(categoryId, partner);
     }
 
     public void deletePreference(Long id){
@@ -77,7 +78,9 @@ public class PreferenceService {
         Preference preference = getPreferenceById(id);
         validateUserAccess(preference, "update");
 
-        preference.setCategory(request.getCategory());
+        preference.setCategory(
+                preferenceCategoryRepository.findById(request.getCategoryId())
+                        .orElseThrow(() -> new ResourceNotFoundException("Preference category with id " + request.getCategoryId() + " not found")));
         preference.setValue(request.getValue());
 
         log.debug("User {} updated preference {}", getCurrentUser().getUsername(), preference.getCategory());
@@ -108,8 +111,8 @@ public class PreferenceService {
         return userService.getUserById(connection.partner().id());
     }
 
-    private List<PreferenceDto> getAllPreferencesByCategory(PreferencesCategory category, User user){
-        return preferenceRepository.findAllByUserAndCategory(user, category).stream().map(this::toDto).toList();
+    private List<PreferenceDto> getAllPreferencesByCategory(Long category, User user){
+        return preferenceRepository.findAllByUserAndCategory_Id(user, category).stream().map(this::toDto).toList();
     }
 
     private List<PreferenceDto> getAllPreferences(User user){
@@ -117,10 +120,6 @@ public class PreferenceService {
     }
 
     private PreferenceDto toDto(Preference preference) {
-        return new PreferenceDto(preference.getId(), preference.getCategory(), preference.getValue());
-    }
-
-    public List<String> listCategories() {
-        return Arrays.stream(PreferencesCategory.values()).map(Enum::name).toList();
+        return new PreferenceDto(preference.getId(), preference.getCategory().getName(), preference.getValue());
     }
 }

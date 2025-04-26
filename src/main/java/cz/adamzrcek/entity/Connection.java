@@ -1,10 +1,7 @@
 package cz.adamzrcek.entity;
 
-import cz.adamzrcek.entity.enums.ConnectionStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -34,11 +31,15 @@ public class Connection {
     @ManyToOne
     @JoinColumn(name = "user1_id", nullable = false)
     private User user1;
+
     @ManyToOne
     @JoinColumn(name = "user2_id", nullable = false)
     private User user2;
+
     @CreationTimestamp
     private LocalDateTime created_at;
-    @Enumerated(EnumType.STRING)
-    private ConnectionStatus status;
+
+    @ManyToOne
+    @JoinColumn(name = "connection_status_id")
+    private ConnectionStatus connectionStatus;
 }

@@ -4,11 +4,12 @@ import cz.adamzrcek.dtos.connection.ConnectionAcceptRequest;
 import cz.adamzrcek.dtos.connection.ConnectionDeleteRequest;
 import cz.adamzrcek.dtos.connection.ConnectionNewRequest;
 import cz.adamzrcek.entity.Connection;
+import cz.adamzrcek.entity.ConnectionStatus;
 import cz.adamzrcek.entity.User;
-import cz.adamzrcek.entity.enums.ConnectionStatus;
 import cz.adamzrcek.exception.ConnectionNotFoundException;
 import cz.adamzrcek.exception.NotAllowedException;
 import cz.adamzrcek.repository.ConnectionRepository;
+import cz.adamzrcek.repository.ConnectionStatusRepository;
 import cz.adamzrcek.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,6 +24,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -39,6 +41,9 @@ class ConnectionServiceTest {
     @Mock
     private UserRepository userRepository;
 
+    @Mock
+    ConnectionStatusRepository connectionStatusRepository;
+
 
     @Test
     public void createConnectionOkTest(){
@@ -49,7 +54,7 @@ class ConnectionServiceTest {
                 .id(1L)
                 .user1(loggedInUser)
                 .user2(userToConnect)
-                .status(ConnectionStatus.PENDING)
+                .connectionStatus(new ConnectionStatus(1L, "USER"))
                 .created_at(LocalDateTime.MAX)
                 .build();
 
@@ -57,6 +62,7 @@ class ConnectionServiceTest {
         when(connectionRepository.findActiveConnectionsForUser(any(User.class))).thenReturn(List.of());
         when(userService.getUserById(any(Long.class))).thenReturn(userToConnect);
         when(connectionRepository.save(any(Connection.class))).thenReturn(connection);
+        given(connectionStatusRepository.findByStatus(anyString())).willReturn(new ConnectionStatus(1L, "PENDING"));
 
         var result = connectionService.createNewConnection(request);
 
@@ -64,7 +70,7 @@ class ConnectionServiceTest {
         assertEquals(connection.getUser1().getId(), result.user1().id());
         assertEquals(connection.getUser2().getId(), result.user2().id());
         assertEquals(connection.getCreated_at(), result.created_at());
-        assertEquals(connection.getStatus(), result.status());
+        assertEquals(connection.getConnectionStatus().getStatus(), result.status());
 
         verify(connectionRepository, times(2)).findActiveConnectionsForUser(any(User.class));
         verify(userService, times(1)).getUserById(any(Long.class));
@@ -125,14 +131,23 @@ class ConnectionServiceTest {
         var request = new ConnectionAcceptRequest(1L);
         var loggedInUser = User.builder().id(2L).username("username1").connection(null).build();
         var userToConnect = User.builder().id(1L).username("username2").connection(null).build();
-        var connectionToAccept = Connection.builder().id(1L).user1(userToConnect).user2(loggedInUser).status(ConnectionStatus.PENDING).build();
-        var connectionToSave = Connection.builder().id(1L).user1(userToConnect).user2(loggedInUser).status(ConnectionStatus.CONNECTED).build();
+        var connectionToAccept = Connection.builder()
+                .id(1L)
+                .user1(userToConnect)
+                .user2(loggedInUser)
+                .connectionStatus(new ConnectionStatus(1L, "PENDING")).build();
+        var connectionToSave = Connection.builder()
+                .id(1L)
+                .user1(userToConnect)
+                .user2(loggedInUser)
+                .connectionStatus(new ConnectionStatus(1L, "CONNECTED")).build();
 
 
         when(userService.getCurrentUser()).thenReturn(loggedInUser);
         when(connectionRepository.findById(request.getConnectionId())).thenReturn(Optional.of(connectionToAccept));
         when(userRepository.save(any())).thenReturn(null);
         when(connectionRepository.save(any())).thenReturn(connectionToSave);
+        given(connectionStatusRepository.findByStatus(anyString())).willReturn(new ConnectionStatus(1L, "CONNECTED"));
 
         ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
         ArgumentCaptor<Connection> connectionArgumentCaptor = ArgumentCaptor.forClass(Connection.class);
@@ -152,7 +167,7 @@ class ConnectionServiceTest {
         assertEquals(result.id(), capturedConnections.getFirst().getId());
         assertEquals(result.user1().id(), capturedUsers.getFirst().getId());
         assertEquals(result.user2().id(), capturedUsers.getLast().getId());
-        assertEquals(result.status(), capturedConnections.getFirst().getStatus());
+        assertEquals(result.status(), capturedConnections.getFirst().getConnectionStatus().getStatus());
 
     }
 
@@ -161,7 +176,7 @@ class ConnectionServiceTest {
         var request = new ConnectionDeleteRequest(1L);
         var loggedInUser = User.builder().id(2L).username("username1").connection(Connection.builder().id(1L).build()).build();
         var userToConnect = User.builder().id(1L).username("username2").connection(Connection.builder().id(1L).build()).build();
-        var connectionToDelete = Connection.builder().id(1L).user1(userToConnect).user2(loggedInUser).status(ConnectionStatus.CONNECTED).build();
+        var connectionToDelete = Connection.builder().id(1L).user1(userToConnect).user2(loggedInUser).connectionStatus(new ConnectionStatus(1L, "CONNECTED")).build();
 
         when(userService.getCurrentUser()).thenReturn(loggedInUser);
         when(connectionRepository.findById(request.getConnectionId())).thenReturn(Optional.of(connectionToDelete));
@@ -194,7 +209,7 @@ class ConnectionServiceTest {
         var loggedInUser = User.builder().id(2L).username("username1").connection(Connection.builder().id(1L).build()).build();
         var userToConnect1 = User.builder().id(1L).username("username2").connection(Connection.builder().id(1L).build()).build();
         var userToConnect2 = User.builder().id(3L).username("username3").connection(Connection.builder().id(1L).build()).build();
-        var connectionToDelete = Connection.builder().id(1L).user1(userToConnect1).user2(userToConnect2).status(ConnectionStatus.CONNECTED).build();
+        var connectionToDelete = Connection.builder().id(1L).user1(userToConnect1).user2(userToConnect2).connectionStatus(new ConnectionStatus(1L, "CONNECTED")).build();
 
         when(userService.getCurrentUser()).thenReturn(loggedInUser);
         when(connectionRepository.findById(request.getConnectionId())).thenReturn(Optional.of(connectionToDelete));
@@ -214,7 +229,7 @@ class ConnectionServiceTest {
                 .id(1L)
                 .user1(currentUser)
                 .user2(partnerUser)
-                .status(ConnectionStatus.PENDING)
+                .connectionStatus(new ConnectionStatus(1L, "PENDING"))
                 .created_at(LocalDateTime.MAX)
                 .build();
 
@@ -228,7 +243,7 @@ class ConnectionServiceTest {
         assertEquals(connection.getId(), result.id());
         assertEquals(connection.getUser2().getId(), result.partner().id());
         assertEquals(connection.getCreated_at(), result.created_at());
-        assertEquals(connection.getStatus(), result.status());
+        assertEquals(connection.getConnectionStatus().getStatus(), result.status());
     }
 
     @Test
