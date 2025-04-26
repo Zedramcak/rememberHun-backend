@@ -1,6 +1,5 @@
 package cz.adamzrcek.service;
 
-import cz.adamzrcek.dtos.ConnectionStatusDto;
 import cz.adamzrcek.dtos.connection.ConnectionAcceptRequest;
 import cz.adamzrcek.dtos.connection.ConnectionDeleteRequest;
 import cz.adamzrcek.dtos.connection.ConnectionDto;
@@ -8,7 +7,6 @@ import cz.adamzrcek.dtos.connection.ConnectionNewRequest;
 import cz.adamzrcek.dtos.connection.ConnectionSignedUserResponse;
 import cz.adamzrcek.dtos.user.UserDto;
 import cz.adamzrcek.entity.Connection;
-import cz.adamzrcek.entity.ConnectionStatus;
 import cz.adamzrcek.entity.User;
 import cz.adamzrcek.exception.ConnectionNotFoundException;
 import cz.adamzrcek.exception.NotAllowedException;
@@ -19,8 +17,6 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @Slf4j
@@ -148,10 +144,5 @@ public class ConnectionService {
                 toUserDto(connection.getUser1().equals(currentUser) ? connection.getUser2() : connection.getUser1()),
                 connection.getCreated_at(),
                 connection.getConnectionStatus().getStatus());
-    }
-
-    public List<ConnectionStatusDto> getAllConnectionsStatusesAsMap() {
-        List<ConnectionStatus> statuses = connectionStatusRepository.findAll();
-        return statuses.stream().map(status -> new ConnectionStatusDto(status.getId(), status.getStatus())).toList();
     }
 }

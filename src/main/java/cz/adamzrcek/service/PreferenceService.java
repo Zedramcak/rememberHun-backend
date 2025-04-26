@@ -4,7 +4,6 @@ import cz.adamzrcek.dtos.preference.PreferenceDto;
 import cz.adamzrcek.dtos.preference.PreferenceNewRequest;
 import cz.adamzrcek.entity.Preference;
 import cz.adamzrcek.entity.User;
-import cz.adamzrcek.entity.PreferenceCategory;
 import cz.adamzrcek.exception.NotAllowedException;
 import cz.adamzrcek.exception.PreferenceNotFoundException;
 import cz.adamzrcek.exception.ResourceNotFoundException;
@@ -14,7 +13,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Slf4j

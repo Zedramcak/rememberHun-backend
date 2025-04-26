@@ -2,11 +2,9 @@ package cz.adamzrcek.controller;
 
 import cz.adamzrcek.dtos.preference.PreferenceDto;
 import cz.adamzrcek.dtos.preference.PreferenceNewRequest;
-import cz.adamzrcek.entity.PreferenceCategory;
 import cz.adamzrcek.service.PreferenceService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import org.apache.coyote.BadRequestException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
