@@ -10,11 +10,15 @@ import cz.adamzrcek.exception.InvalidPasswordException;
 import cz.adamzrcek.exception.UserNotFoundException;
 import cz.adamzrcek.repository.RoleRepository;
 import cz.adamzrcek.repository.UserRepository;
+import cz.adamzrcek.security.JwtBlacklist;
 import cz.adamzrcek.security.JwtUtil;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.time.Instant;
 
 @Slf4j
 @Service
@@ -24,6 +28,7 @@ public class AuthService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
+    private final JwtBlacklist jwtBlacklist;
 
     public void register(RegisterRequest registerRequest) {
         if (userRepository.findByEmail(registerRequest.getEmail()).isPresent()) {
@@ -42,7 +47,7 @@ public class AuthService {
 
         userRepository.save(user);
 
-        log.info("User {} registered successfully", user.getUsername());
+        log.debug("User {} registered successfully", user.getUsername());
     }
 
     public AuthResponse login(LoginRequest request) {
@@ -62,7 +67,7 @@ public class AuthService {
 
         String token = jwtUtil.generateToken(user.getEmail(), user.getRole().getName());
         String refreshToken = jwtUtil.generateRefreshToken(user.getEmail());
-        log.info("User {} logged in", user.getUsername());
+        log.debug("User {} logged in", user.getUsername());
         return AuthResponse.builder()
                 .token(token)
                 .refreshToken(refreshToken)
@@ -85,7 +90,7 @@ public class AuthService {
         String newAccessToken = jwtUtil.generateToken(user.getEmail(), user.getRole().getName());
         String newRefreshToken = jwtUtil.generateRefreshToken(user.getEmail());
 
-        log.info("User {} refreshed token", user.getUsername());
+        log.debug("User {} refreshed token", user.getUsername());
 
         return AuthResponse.builder()
                 .token(newAccessToken)
@@ -93,5 +98,19 @@ public class AuthService {
                 .username(user.getUsername())
                 .role(user.getRole().getName())
                 .build();
+    }
+
+    public void logout(String token) {
+        try {
+            Claims claims = jwtUtil.getClaimsFromToken(token);
+
+            Instant expiryTime = claims.getExpiration().toInstant();
+
+            jwtBlacklist.blacklistToken(token, expiryTime);
+
+            log.debug("User with email {} logged out and token blacklisted", claims.getSubject());
+        } catch (Exception e) {
+            log.warn("Failed to process logout for token: {}", e.getMessage());
+        }
     }
 }

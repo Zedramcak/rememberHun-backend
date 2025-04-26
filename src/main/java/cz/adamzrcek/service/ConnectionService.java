@@ -35,7 +35,7 @@ public class ConnectionService {
             throw new NotAllowedException("Current user already has an active connection");
         }
 
-        log.debug("User {} is creating new connection.", currentUser.getUsername());
+        log.debug("User {} is creating new connection.", currentUser.getId());
 
         User userToConnect = userService.getUserById(request.getUserId());
 
@@ -53,7 +53,7 @@ public class ConnectionService {
                 .connectionStatus(connectionStatusRepository.findByStatus("PENDING"))
                 .build();
 
-        log.debug("New connection created for users {} and {}", currentUser.getUsername(), userToConnect.getUsername());
+        log.debug("New connection created for users {} and {}", currentUser.getId(), userToConnect.getId());
 
         return toDto(connectionRepository.save(newConnection));
     }
@@ -85,7 +85,7 @@ public class ConnectionService {
 
         connection.setConnectionStatus(connectionStatusRepository.findByStatus("CONNECTED"));
 
-        log.debug("User {} accepted connection with id {}", currentUser.getUsername(), connection.getId());
+        log.debug("User {} accepted connection with id {}", currentUser.getId(), connection.getId());
 
         currentUser.setConnection(connection);
 
@@ -95,7 +95,7 @@ public class ConnectionService {
         userRepository.save(userToConnect);
         userRepository.save(currentUser);
 
-        log.debug("User {} and {} are connected", currentUser.getUsername(), userToConnect.getUsername());
+        log.debug("User {} and {} are connected", currentUser.getId(), userToConnect.getId());
 
         return toDto(connectionRepository.save(connection));
     }
@@ -112,7 +112,7 @@ public class ConnectionService {
         }
 
 
-        log.debug("User {} requested deletion connection with id {}", currentUser.getUsername(), connection.getId());
+        log.debug("User {} requested deletion connection with id {}", currentUser.getId(), connection.getId());
 
         connection.setConnectionStatus(connectionStatusRepository.findByStatus("DELETED"));
 
@@ -123,22 +123,22 @@ public class ConnectionService {
         secondUser.setConnection(null);
         userRepository.save(secondUser);
 
-        log.debug("User {} and {} are disconnected", currentUser.getUsername(), secondUser.getUsername());
+        log.debug("User {} and {} are disconnected", currentUser.getId(), secondUser.getId());
 
         connectionRepository.save(connection);
 
-        log.debug("User {} deleted connection with id {}", currentUser.getUsername(), connection.getId());
+        log.debug("User {} deleted connection with id {}", currentUser.getId(), connection.getId());
     }
 
     public ConnectionSignedUserResponse getCurrentConnection() {
         User currentUser = userService.getCurrentUser();
-        log.debug("User {} requested current connection", currentUser.getUsername());
+        log.debug("User {} requested current connection", currentUser.getId());
         if (currentUser.getConnection() == null) {
             return null;
         }
 
         Connection connection = currentUser.getConnection();
-        log.debug("User {} has current connection with id {}", currentUser.getUsername(), connection.getId());
+        log.debug("User {} has current connection with id {}", currentUser.getId(), connection.getId());
         return new ConnectionSignedUserResponse(
                 connection.getId(),
                 toUserDto(connection.getUser1().equals(currentUser) ? connection.getUser2() : connection.getUser1()),

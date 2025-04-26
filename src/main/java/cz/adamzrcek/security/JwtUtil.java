@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
+import java.util.UUID;
 
 @Slf4j
 @Component
@@ -24,10 +25,15 @@ public class JwtUtil {
     }
 
     public String generateToken(String email, String role) {
+
+        String tokenId = UUID.randomUUID().toString();
+
         return Jwts.builder()
                 .setSubject(email)
                 .claim("role", role)
                 .claim("email", email)
+                .setId(tokenId)
+                .setIssuer("rememberHun-api")
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + TOKEN_EXPIRATION_TIME_MS)) // 1 hour
                 .signWith(getSecretKey(), SignatureAlgorithm.HS256)

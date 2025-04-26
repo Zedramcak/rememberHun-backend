@@ -40,7 +40,7 @@ public class PreferenceService {
                 .value(request.getValue())
                 .user(currentUser).build();
 
-        log.debug("User {} created new preference with category {}", currentUser.getUsername(), preference.getCategory());
+        log.debug("User {} created new preference with category {}", currentUser.getId(), preference.getCategory());
 
         return toDto(preferenceRepository.save(preference));
     }
@@ -67,7 +67,7 @@ public class PreferenceService {
         Preference preference = getPreferenceById(id);
         validateUserAccess(preference, "delete");
 
-        log.debug("User {} deleted preference {}", getCurrentUser().getUsername(), preference.getCategory());
+        log.debug("User {} deleted preference {}", getCurrentUser().getId(), preference.getCategory());
 
         preferenceRepository.delete(preference);
     }
@@ -81,7 +81,7 @@ public class PreferenceService {
                         .orElseThrow(() -> new ResourceNotFoundException("Preference category with id " + request.getCategoryId() + " not found")));
         preference.setValue(request.getValue());
 
-        log.debug("User {} updated preference {}", getCurrentUser().getUsername(), preference.getCategory());
+        log.debug("User {} updated preference {}", getCurrentUser().getId(), preference.getCategory());
 
         return toDto(preferenceRepository.save(preference));
     }
