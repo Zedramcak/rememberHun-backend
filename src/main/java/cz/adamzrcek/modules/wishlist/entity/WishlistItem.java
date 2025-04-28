@@ -1,7 +1,7 @@
 package cz.adamzrcek.modules.wishlist.entity;
 
 
-import cz.adamzrcek.config.EncryptDecryptConverter;
+import cz.adamzrcek.modules.shared.config.EncryptDecryptConverter;
 import cz.adamzrcek.modules.user.entity.User;
 import cz.adamzrcek.entity.WishlistCategory;
 import jakarta.persistence.Convert;

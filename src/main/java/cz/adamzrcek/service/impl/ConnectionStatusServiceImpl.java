@@ -1,6 +1,6 @@
 package cz.adamzrcek.service.impl;
 
-import cz.adamzrcek.dtos.ConnectionStatusDto;
+import cz.adamzrcek.modules.shared.dtos.ConnectionStatusDto;
 import cz.adamzrcek.entity.ConnectionStatus;
 import cz.adamzrcek.repository.ConnectionStatusRepository;
 import cz.adamzrcek.service.ConnectionStatusService;

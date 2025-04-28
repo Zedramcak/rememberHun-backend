@@ -1,10 +1,10 @@
 package cz.adamzrcek.service;
 
-import cz.adamzrcek.dtos.connection.ConnectionAcceptRequest;
-import cz.adamzrcek.dtos.connection.ConnectionDeleteRequest;
-import cz.adamzrcek.dtos.connection.ConnectionDto;
-import cz.adamzrcek.dtos.connection.ConnectionNewRequest;
-import cz.adamzrcek.dtos.connection.ConnectionSignedUserResponse;
+import cz.adamzrcek.modules.connection.dtos.ConnectionAcceptRequest;
+import cz.adamzrcek.modules.connection.dtos.ConnectionDeleteRequest;
+import cz.adamzrcek.modules.connection.dtos.ConnectionDto;
+import cz.adamzrcek.modules.connection.dtos.ConnectionNewRequest;
+import cz.adamzrcek.modules.connection.dtos.ConnectionSignedUserResponse;
 
 public interface ConnectionService {
     ConnectionDto createNewConnection(ConnectionNewRequest request);

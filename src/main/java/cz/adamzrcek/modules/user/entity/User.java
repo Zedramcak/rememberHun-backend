@@ -1,6 +1,6 @@
 package cz.adamzrcek.modules.user.entity;
 
-import cz.adamzrcek.config.EncryptDecryptConverter;
+import cz.adamzrcek.modules.shared.config.EncryptDecryptConverter;
 import cz.adamzrcek.entity.Role;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;

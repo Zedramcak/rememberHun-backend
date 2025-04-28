@@ -1,6 +1,6 @@
 package cz.adamzrcek.repository;
 
-import cz.adamzrcek.entity.Connection;
+import cz.adamzrcek.modules.connection.entity.Connection;
 import cz.adamzrcek.entity.ImportantDate;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

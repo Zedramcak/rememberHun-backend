@@ -6,7 +6,7 @@ import cz.adamzrcek.entity.Preference;
 import cz.adamzrcek.entity.PreferenceCategory;
 import cz.adamzrcek.entity.Role;
 import cz.adamzrcek.modules.user.entity.User;
-import cz.adamzrcek.exception.NotAllowedException;
+import cz.adamzrcek.modules.auth.exception.NotAllowedException;
 import cz.adamzrcek.exception.PreferenceNotFoundException;
 import cz.adamzrcek.modules.user.service.UserService;
 import cz.adamzrcek.repository.PreferenceCategoryRepository;

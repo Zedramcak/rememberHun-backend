@@ -1,16 +1,17 @@
 package cz.adamzrcek.service;
 
-import cz.adamzrcek.dtos.authorization.LoginRequest;
-import cz.adamzrcek.dtos.authorization.RegisterRequest;
-import cz.adamzrcek.dtos.authorization.TokenRefreshRequest;
+import cz.adamzrcek.modules.auth.dtos.LoginRequest;
+import cz.adamzrcek.modules.auth.dtos.RegisterRequest;
+import cz.adamzrcek.modules.auth.dtos.TokenRefreshRequest;
 import cz.adamzrcek.entity.Role;
+import cz.adamzrcek.modules.auth.service.AuthService;
 import cz.adamzrcek.modules.user.entity.User;
-import cz.adamzrcek.exception.EmailAlreadyExistsException;
-import cz.adamzrcek.exception.InvalidPasswordException;
+import cz.adamzrcek.modules.auth.exception.EmailAlreadyExistsException;
+import cz.adamzrcek.modules.auth.exception.InvalidPasswordException;
 import cz.adamzrcek.modules.user.exception.UserNotFoundException;
 import cz.adamzrcek.repository.RoleRepository;
 import cz.adamzrcek.modules.user.repository.UserRepository;
-import cz.adamzrcek.security.JwtUtil;
+import cz.adamzrcek.modules.auth.security.JwtUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;

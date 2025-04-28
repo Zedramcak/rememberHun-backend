@@ -1,6 +1,6 @@
 package cz.adamzrcek.service;
 
-import cz.adamzrcek.dtos.ConnectionStatusDto;
+import cz.adamzrcek.modules.shared.dtos.ConnectionStatusDto;
 
 import java.util.List;
 

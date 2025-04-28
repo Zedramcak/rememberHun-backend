@@ -1,6 +1,6 @@
 package cz.adamzrcek.controller;
 
-import cz.adamzrcek.dtos.ConnectionStatusDto;
+import cz.adamzrcek.modules.shared.dtos.ConnectionStatusDto;
 import cz.adamzrcek.dtos.ImportantDateCategoryDto;
 import cz.adamzrcek.dtos.PreferenceCategoryDto;
 import cz.adamzrcek.dtos.RoleDto;

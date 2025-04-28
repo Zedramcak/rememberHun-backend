@@ -4,7 +4,7 @@ import cz.adamzrcek.modules.wishlist.dtos.WishlistItemDto;
 import cz.adamzrcek.modules.wishlist.dtos.WishlistItemRequest;
 import cz.adamzrcek.modules.user.entity.User;
 import cz.adamzrcek.modules.wishlist.entity.WishlistItem;
-import cz.adamzrcek.exception.NotAllowedException;
+import cz.adamzrcek.modules.auth.exception.NotAllowedException;
 import cz.adamzrcek.repository.WishlistCategoryRepository;
 import cz.adamzrcek.modules.wishlist.repository.WishlistRepository;
 import cz.adamzrcek.service.ConnectionService;

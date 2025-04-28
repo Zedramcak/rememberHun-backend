@@ -1,14 +1,14 @@
 package cz.adamzrcek.service;
 
-import cz.adamzrcek.dtos.connection.ConnectionAcceptRequest;
-import cz.adamzrcek.dtos.connection.ConnectionDeleteRequest;
-import cz.adamzrcek.dtos.connection.ConnectionNewRequest;
-import cz.adamzrcek.entity.Connection;
+import cz.adamzrcek.modules.connection.dtos.ConnectionAcceptRequest;
+import cz.adamzrcek.modules.connection.dtos.ConnectionDeleteRequest;
+import cz.adamzrcek.modules.connection.dtos.ConnectionNewRequest;
+import cz.adamzrcek.modules.connection.entity.Connection;
 import cz.adamzrcek.entity.ConnectionStatus;
 import cz.adamzrcek.modules.user.entity.User;
 import cz.adamzrcek.modules.user.entity.UserDetail;
-import cz.adamzrcek.exception.ConnectionNotFoundException;
-import cz.adamzrcek.exception.NotAllowedException;
+import cz.adamzrcek.modules.connection.exception.ConnectionNotFoundException;
+import cz.adamzrcek.modules.auth.exception.NotAllowedException;
 import cz.adamzrcek.modules.user.service.UserService;
 import cz.adamzrcek.repository.ConnectionRepository;
 import cz.adamzrcek.repository.ConnectionStatusRepository;

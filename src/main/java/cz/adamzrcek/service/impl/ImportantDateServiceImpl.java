@@ -1,12 +1,12 @@
 package cz.adamzrcek.service.impl;
 
-import cz.adamzrcek.dtos.connection.ConnectionSignedUserResponse;
+import cz.adamzrcek.modules.connection.dtos.ConnectionSignedUserResponse;
 import cz.adamzrcek.dtos.importantDate.ImportantDateDto;
 import cz.adamzrcek.dtos.importantDate.ImportantDateRequest;
-import cz.adamzrcek.entity.Connection;
+import cz.adamzrcek.modules.connection.entity.Connection;
 import cz.adamzrcek.entity.ImportantDate;
-import cz.adamzrcek.exception.NotAllowedException;
-import cz.adamzrcek.exception.ResourceNotFoundException;
+import cz.adamzrcek.modules.auth.exception.NotAllowedException;
+import cz.adamzrcek.modules.shared.exception.ResourceNotFoundException;
 import cz.adamzrcek.repository.ConnectionRepository;
 import cz.adamzrcek.repository.ImportantDateCategoryRepository;
 import cz.adamzrcek.repository.ImportantDateRepository;
