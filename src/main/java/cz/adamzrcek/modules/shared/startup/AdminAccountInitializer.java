@@ -2,7 +2,7 @@ package cz.adamzrcek.modules.shared.startup;
 
 import cz.adamzrcek.modules.user.entity.User;
 import cz.adamzrcek.modules.user.entity.UserDetail;
-import cz.adamzrcek.repository.RoleRepository;
+import cz.adamzrcek.modules.referencedata.repository.RoleRepository;
 import cz.adamzrcek.modules.user.repository.UserDetailRepository;
 import cz.adamzrcek.modules.user.repository.UserRepository;
 import jakarta.annotation.PostConstruct;

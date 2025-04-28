@@ -1,16 +1,18 @@
 package cz.adamzrcek.service;
 
-import cz.adamzrcek.dtos.preference.PreferenceDto;
-import cz.adamzrcek.dtos.preference.PreferenceNewRequest;
-import cz.adamzrcek.entity.Preference;
-import cz.adamzrcek.entity.PreferenceCategory;
-import cz.adamzrcek.entity.Role;
+import cz.adamzrcek.modules.preference.dtos.PreferenceDto;
+import cz.adamzrcek.modules.preference.dtos.PreferenceNewRequest;
+import cz.adamzrcek.modules.preference.entity.Preference;
+import cz.adamzrcek.modules.referencedata.entity.PreferenceCategory;
+import cz.adamzrcek.modules.preference.service.PreferenceService;
+import cz.adamzrcek.modules.referencedata.entity.Role;
+import cz.adamzrcek.modules.connection.service.ConnectionService;
 import cz.adamzrcek.modules.user.entity.User;
 import cz.adamzrcek.modules.auth.exception.NotAllowedException;
-import cz.adamzrcek.exception.PreferenceNotFoundException;
+import cz.adamzrcek.modules.preference.exception.PreferenceNotFoundException;
 import cz.adamzrcek.modules.user.service.UserService;
-import cz.adamzrcek.repository.PreferenceCategoryRepository;
-import cz.adamzrcek.repository.PreferenceRepository;
+import cz.adamzrcek.modules.referencedata.repository.PreferenceCategoryRepository;
+import cz.adamzrcek.modules.preference.repository.PreferenceRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;

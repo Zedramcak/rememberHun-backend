@@ -1,12 +1,12 @@
 package cz.adamzrcek.modules.connection.controller;
 
-import cz.adamzrcek.dtos.ErrorResponse;
+import cz.adamzrcek.modules.shared.dtos.ErrorResponse;
 import cz.adamzrcek.modules.connection.dtos.ConnectionAcceptRequest;
 import cz.adamzrcek.modules.connection.dtos.ConnectionDeleteRequest;
 import cz.adamzrcek.modules.connection.dtos.ConnectionDto;
 import cz.adamzrcek.modules.connection.dtos.ConnectionNewRequest;
 import cz.adamzrcek.modules.connection.dtos.ConnectionSignedUserResponse;
-import cz.adamzrcek.service.ConnectionService;
+import cz.adamzrcek.modules.connection.service.ConnectionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

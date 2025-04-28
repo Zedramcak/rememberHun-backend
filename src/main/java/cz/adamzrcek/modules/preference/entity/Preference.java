@@ -1,8 +1,8 @@
-package cz.adamzrcek.modules.user.entity;
+package cz.adamzrcek.modules.preference.entity;
 
-import cz.adamzrcek.modules.referencedata.entity.Role;
+import cz.adamzrcek.modules.referencedata.entity.PreferenceCategory;
 import cz.adamzrcek.modules.shared.config.EncryptDecryptConverter;
-import jakarta.persistence.Column;
+import cz.adamzrcek.modules.user.entity.User;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,17 +10,15 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
-
 
 @Entity
 @NoArgsConstructor
@@ -28,28 +26,23 @@ import java.time.LocalDateTime;
 @Builder
 @Getter
 @Setter
-@Table(name = "users")
-public class User {
+public class Preference {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
-    private String username;
-    private String password;
-    @Column(unique = true)
-    @Convert(converter = EncryptDecryptConverter.class)
-    private String email;
     @ManyToOne
-    @JoinColumn(name = "role_id")
-    private Role role;
-    @OneToOne
-    @JoinColumn(name = "user_details_id")
-    private UserDetail userDetail;
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private PreferenceCategory category;
+
+    @Convert(converter = EncryptDecryptConverter.class)
+    private String value;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
-    @CreationTimestamp
-    private LocalDateTime lastActiveAt;
-    private LocalDateTime scheduledDeletionDate;
+    @UpdateTimestamp
+    private LocalDateTime lastUpdateAt;
 }

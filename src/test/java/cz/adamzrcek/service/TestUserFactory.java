@@ -1,6 +1,6 @@
 package cz.adamzrcek.service;
 
-import cz.adamzrcek.entity.Role;
+import cz.adamzrcek.modules.referencedata.entity.Role;
 import cz.adamzrcek.modules.user.entity.User;
 
 public class TestUserFactory {

@@ -1,6 +1,6 @@
 package cz.adamzrcek.modules.shared.exception;
 
-import cz.adamzrcek.dtos.ErrorResponse;
+import cz.adamzrcek.modules.shared.dtos.ErrorResponse;
 import cz.adamzrcek.modules.auth.exception.EmailAlreadyExistsException;
 import cz.adamzrcek.modules.auth.exception.InvalidPasswordException;
 import cz.adamzrcek.modules.auth.exception.NotAllowedException;

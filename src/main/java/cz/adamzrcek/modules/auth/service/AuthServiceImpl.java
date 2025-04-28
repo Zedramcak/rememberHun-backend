@@ -9,7 +9,7 @@ import cz.adamzrcek.modules.user.entity.UserDetail;
 import cz.adamzrcek.modules.auth.exception.EmailAlreadyExistsException;
 import cz.adamzrcek.modules.auth.exception.InvalidPasswordException;
 import cz.adamzrcek.modules.user.exception.UserNotFoundException;
-import cz.adamzrcek.repository.RoleRepository;
+import cz.adamzrcek.modules.referencedata.repository.RoleRepository;
 import cz.adamzrcek.modules.user.repository.UserDetailRepository;
 import cz.adamzrcek.modules.user.repository.UserRepository;
 import cz.adamzrcek.modules.auth.security.JwtBlacklist;

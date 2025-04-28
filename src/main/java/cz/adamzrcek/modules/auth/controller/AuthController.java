@@ -1,6 +1,6 @@
 package cz.adamzrcek.modules.auth.controller;
 
-import cz.adamzrcek.dtos.ErrorResponse;
+import cz.adamzrcek.modules.shared.dtos.ErrorResponse;
 import cz.adamzrcek.modules.auth.dtos.AuthResponse;
 import cz.adamzrcek.modules.auth.dtos.LoginRequest;
 import cz.adamzrcek.modules.auth.dtos.RegisterRequest;

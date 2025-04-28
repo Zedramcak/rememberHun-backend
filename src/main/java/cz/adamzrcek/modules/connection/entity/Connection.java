@@ -1,6 +1,6 @@
 package cz.adamzrcek.modules.connection.entity;
 
-import cz.adamzrcek.entity.ConnectionStatus;
+import cz.adamzrcek.modules.referencedata.entity.ConnectionStatus;
 import cz.adamzrcek.modules.user.entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
