@@ -3,7 +3,6 @@ package cz.adamzrcek.modules.user.service;
 import cz.adamzrcek.modules.privacy.annotation.LogDataAccess;
 import cz.adamzrcek.modules.user.entity.User;
 import cz.adamzrcek.modules.user.entity.UserDetail;
-import cz.adamzrcek.modules.user.repository.UserDetailRepository;
 import cz.adamzrcek.modules.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
