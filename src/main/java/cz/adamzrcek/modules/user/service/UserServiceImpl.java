@@ -1,8 +1,8 @@
 package cz.adamzrcek.modules.user.service;
 
+import cz.adamzrcek.modules.privacy.annotation.LogDataAccess;
 import cz.adamzrcek.modules.user.entity.User;
 import cz.adamzrcek.modules.user.entity.UserDetail;
-import cz.adamzrcek.modules.shared.exception.ResourceNotFoundException;
 import cz.adamzrcek.modules.user.repository.UserDetailRepository;
 import cz.adamzrcek.modules.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,23 +15,33 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    private final UserDetailRepository userDetailRepository;
+    private final UserDetailService userDetailService;
 
     @Override
     public User getCurrentUser(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        User currentUser = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User with email address " + email + " not found"));
-        currentUser.setUserDetail(userDetailRepository.findById(currentUser.getUserDetail().getId()).orElseThrow(() -> new ResourceNotFoundException("UserDetail for user " + currentUser.getId() + " not found")));
+        User currentUser = getCurrentUser(email);
+        currentUser.setUserDetail(userDetailService.getUserDetail(currentUser.getUserDetail().getId()));
 
         return currentUser;
     }
 
+    @LogDataAccess(entity = "user")
+    private User getCurrentUser(String email) {
+        return userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User with email address " + email + " not found"));
+    }
+
     @Override
     public User getUserById(Long id){
-        User user = userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User with id " + id + " not found"));
-        UserDetail userDetail = userDetailRepository.findById(user.getUserDetail().getId()).orElseThrow(() -> new ResourceNotFoundException("UserDetail for user " + user.getId() + " not found"));
+        User user = getUserFromRepository(id);
+        UserDetail userDetail = userDetailService.getUserDetail(user.getUserDetail().getId());
         user.setUserDetail(userDetail);
         return user;
+    }
+
+    @LogDataAccess(entity = "user")
+    private User getUserFromRepository(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User with id " + id + " not found"));
     }
 }
