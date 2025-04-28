@@ -1,4 +1,4 @@
-package cz.adamzrcek.dtos.user;
+package cz.adamzrcek.modules.user.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

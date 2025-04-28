@@ -1,4 +1,4 @@
-package cz.adamzrcek.dtos.user;
+package cz.adamzrcek.modules.user.dtos;
 
 public record UserDto(
         Long id,

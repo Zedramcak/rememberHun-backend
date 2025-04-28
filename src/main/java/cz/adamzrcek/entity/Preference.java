@@ -1,6 +1,7 @@
 package cz.adamzrcek.entity;
 
 import cz.adamzrcek.config.EncryptDecryptConverter;
+import cz.adamzrcek.modules.user.entity.User;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

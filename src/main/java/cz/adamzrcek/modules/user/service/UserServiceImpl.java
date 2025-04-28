@@ -1,11 +1,10 @@
-package cz.adamzrcek.service.impl;
+package cz.adamzrcek.modules.user.service;
 
-import cz.adamzrcek.entity.User;
-import cz.adamzrcek.entity.UserDetail;
+import cz.adamzrcek.modules.user.entity.User;
+import cz.adamzrcek.modules.user.entity.UserDetail;
 import cz.adamzrcek.exception.ResourceNotFoundException;
-import cz.adamzrcek.repository.UserDetailRepository;
-import cz.adamzrcek.repository.UserRepository;
-import cz.adamzrcek.service.UserService;
+import cz.adamzrcek.modules.user.repository.UserDetailRepository;
+import cz.adamzrcek.modules.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

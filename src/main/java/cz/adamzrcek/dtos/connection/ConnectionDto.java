@@ -1,6 +1,6 @@
 package cz.adamzrcek.dtos.connection;
 
-import cz.adamzrcek.dtos.user.UserDto;
+import cz.adamzrcek.modules.user.dtos.UserDto;
 
 import java.time.LocalDateTime;
 

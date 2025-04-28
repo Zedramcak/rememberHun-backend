@@ -1,8 +1,8 @@
-package cz.adamzrcek.controller;
+package cz.adamzrcek.modules.user.controller;
 
-import cz.adamzrcek.dtos.user.UserResponse;
-import cz.adamzrcek.entity.User;
-import cz.adamzrcek.service.UserService;
+import cz.adamzrcek.modules.user.dtos.UserResponse;
+import cz.adamzrcek.modules.user.entity.User;
+import cz.adamzrcek.modules.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

@@ -2,13 +2,13 @@ package cz.adamzrcek.modules.wishlist.service;
 
 import cz.adamzrcek.modules.wishlist.dtos.WishlistItemDto;
 import cz.adamzrcek.modules.wishlist.dtos.WishlistItemRequest;
-import cz.adamzrcek.entity.User;
+import cz.adamzrcek.modules.user.entity.User;
 import cz.adamzrcek.modules.wishlist.entity.WishlistItem;
 import cz.adamzrcek.exception.NotAllowedException;
 import cz.adamzrcek.repository.WishlistCategoryRepository;
 import cz.adamzrcek.modules.wishlist.repository.WishlistRepository;
 import cz.adamzrcek.service.ConnectionService;
-import cz.adamzrcek.service.UserService;
+import cz.adamzrcek.modules.user.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

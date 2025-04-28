@@ -1,6 +1,6 @@
-package cz.adamzrcek.repository;
+package cz.adamzrcek.modules.user.repository;
 
-import cz.adamzrcek.entity.User;
+import cz.adamzrcek.modules.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

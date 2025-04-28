@@ -1,7 +1,7 @@
 package cz.adamzrcek.service;
 
 import cz.adamzrcek.entity.Role;
-import cz.adamzrcek.entity.User;
+import cz.adamzrcek.modules.user.entity.User;
 
 public class TestUserFactory {
     public static User basicUser() {

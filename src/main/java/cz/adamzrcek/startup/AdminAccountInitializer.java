@@ -1,10 +1,10 @@
 package cz.adamzrcek.startup;
 
-import cz.adamzrcek.entity.User;
-import cz.adamzrcek.entity.UserDetail;
+import cz.adamzrcek.modules.user.entity.User;
+import cz.adamzrcek.modules.user.entity.UserDetail;
 import cz.adamzrcek.repository.RoleRepository;
-import cz.adamzrcek.repository.UserDetailRepository;
-import cz.adamzrcek.repository.UserRepository;
+import cz.adamzrcek.modules.user.repository.UserDetailRepository;
+import cz.adamzrcek.modules.user.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

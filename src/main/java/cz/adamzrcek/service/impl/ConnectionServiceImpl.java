@@ -5,23 +5,20 @@ import cz.adamzrcek.dtos.connection.ConnectionDeleteRequest;
 import cz.adamzrcek.dtos.connection.ConnectionDto;
 import cz.adamzrcek.dtos.connection.ConnectionNewRequest;
 import cz.adamzrcek.dtos.connection.ConnectionSignedUserResponse;
-import cz.adamzrcek.dtos.user.UserDto;
+import cz.adamzrcek.modules.user.dtos.UserDto;
 import cz.adamzrcek.entity.Connection;
-import cz.adamzrcek.entity.User;
-import cz.adamzrcek.entity.UserDetail;
+import cz.adamzrcek.modules.user.entity.User;
 import cz.adamzrcek.exception.ConnectionNotFoundException;
 import cz.adamzrcek.exception.NotAllowedException;
 import cz.adamzrcek.repository.ConnectionRepository;
 import cz.adamzrcek.repository.ConnectionStatusRepository;
-import cz.adamzrcek.repository.UserRepository;
+import cz.adamzrcek.modules.user.repository.UserRepository;
 import cz.adamzrcek.service.ConnectionService;
-import cz.adamzrcek.service.UserService;
+import cz.adamzrcek.modules.user.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
 
 @Service
 @Slf4j

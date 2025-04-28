@@ -1,6 +1,6 @@
-package cz.adamzrcek.service;
+package cz.adamzrcek.modules.user.service;
 
-import cz.adamzrcek.entity.User;
+import cz.adamzrcek.modules.user.entity.User;
 
 public interface UserService {
     User getCurrentUser();
