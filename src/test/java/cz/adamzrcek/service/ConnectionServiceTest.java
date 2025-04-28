@@ -6,6 +6,7 @@ import cz.adamzrcek.dtos.connection.ConnectionNewRequest;
 import cz.adamzrcek.entity.Connection;
 import cz.adamzrcek.entity.ConnectionStatus;
 import cz.adamzrcek.entity.User;
+import cz.adamzrcek.entity.UserDetail;
 import cz.adamzrcek.exception.ConnectionNotFoundException;
 import cz.adamzrcek.exception.NotAllowedException;
 import cz.adamzrcek.repository.ConnectionRepository;
@@ -48,8 +49,8 @@ class ConnectionServiceTest {
     @Test
     public void createConnectionOkTest(){
         var request = new ConnectionNewRequest(1L);
-        var loggedInUser = User.builder().id(2L).username("username1").connection(null).build();
-        var userToConnect = User.builder().id(1L).username("username2").connection(null).build();
+        var loggedInUser = User.builder().id(2L).username("username1").userDetail(UserDetail.builder().connection(null).build()).build();
+        var userToConnect = User.builder().id(1L).username("username2").userDetail(UserDetail.builder().connection(null).build()).build();
         var connection = Connection.builder()
                 .id(1L)
                 .user1(loggedInUser)
@@ -80,7 +81,7 @@ class ConnectionServiceTest {
     @Test
     public void createConnectionFailCurrentUserHasConnectionTest(){
         var request = new ConnectionNewRequest(1L);
-        var loggedInUser = User.builder().id(2L).username("username1").connection(Connection.builder().id(1L).build()).build();
+        var loggedInUser = User.builder().id(2L).username("username1").userDetail(UserDetail.builder().connection(Connection.builder().id(1L).build()).build()).build();
 
         when(userService.getCurrentUser()).thenReturn(loggedInUser);
         when(connectionRepository.findActiveConnectionsForUser(loggedInUser)).thenReturn(List.of(Connection.builder().build()));
@@ -95,8 +96,8 @@ class ConnectionServiceTest {
     @Test
     public void createConnectionUserToConnectHasConnectionTest(){
         var request = new ConnectionNewRequest(1L);
-        var loggedInUser = User.builder().id(2L).username("username1").connection(null).build();
-        var userToConnect = User.builder().id(1L).username("username2").connection(Connection.builder().id(1L).build()).build();
+        var loggedInUser = User.builder().id(2L).username("username1").userDetail(UserDetail.builder().connection(null).build()).build();
+        var userToConnect = User.builder().id(1L).username("username2").userDetail(UserDetail.builder().connection(Connection.builder().id(1L).build()).build()).build();
 
         when(userService.getCurrentUser()).thenReturn(loggedInUser);
         when(connectionRepository.findActiveConnectionsForUser(loggedInUser)).thenReturn(List.of());
@@ -113,7 +114,7 @@ class ConnectionServiceTest {
     @Test
     public void createConnectionUserToConnectIsCurrentUserTest(){
         var request = new ConnectionNewRequest(1L);
-        var loggedInUser = User.builder().id(1L).username("username1").connection(null).build();
+        var loggedInUser = User.builder().id(1L).username("username1").userDetail(UserDetail.builder().connection(Connection.builder().id(null).build()).build()).build();
 
         when(userService.getCurrentUser()).thenReturn(loggedInUser);
         when(connectionRepository.findActiveConnectionsForUser(loggedInUser)).thenReturn(List.of());
@@ -129,8 +130,8 @@ class ConnectionServiceTest {
     @Test
     public void acceptConnectionOkTest(){
         var request = new ConnectionAcceptRequest(1L);
-        var loggedInUser = User.builder().id(2L).username("username1").connection(null).build();
-        var userToConnect = User.builder().id(1L).username("username2").connection(null).build();
+        var loggedInUser = User.builder().id(2L).username("username1").userDetail(UserDetail.builder().connection(Connection.builder().id(null).build()).build()).build();
+        var userToConnect = User.builder().id(1L).username("username2").userDetail(UserDetail.builder().connection(Connection.builder().id(null).build()).build()).build();
         var connectionToAccept = Connection.builder()
                 .id(1L)
                 .user1(userToConnect)
@@ -174,8 +175,8 @@ class ConnectionServiceTest {
     @Test
     public void deleteConnectionOkTest() {
         var request = new ConnectionDeleteRequest(1L);
-        var loggedInUser = User.builder().id(2L).username("username1").connection(Connection.builder().id(1L).build()).build();
-        var userToConnect = User.builder().id(1L).username("username2").connection(Connection.builder().id(1L).build()).build();
+        var loggedInUser = User.builder().id(2L).username("username1").userDetail(UserDetail.builder().connection(Connection.builder().id(1L).build()).build()).build();
+        var userToConnect = User.builder().id(1L).username("username2").userDetail(UserDetail.builder().connection(Connection.builder().id(1L).build()).build()).build();
         var connectionToDelete = Connection.builder().id(1L).user1(userToConnect).user2(loggedInUser).connectionStatus(new ConnectionStatus(1L, "CONNECTED")).build();
 
         when(userService.getCurrentUser()).thenReturn(loggedInUser);
@@ -206,9 +207,9 @@ class ConnectionServiceTest {
     @Test
     public void deleteConnectionNotAllowedTest() {
         var request = new ConnectionDeleteRequest(1L);
-        var loggedInUser = User.builder().id(2L).username("username1").connection(Connection.builder().id(1L).build()).build();
-        var userToConnect1 = User.builder().id(1L).username("username2").connection(Connection.builder().id(1L).build()).build();
-        var userToConnect2 = User.builder().id(3L).username("username3").connection(Connection.builder().id(1L).build()).build();
+        var loggedInUser = User.builder().id(2L).username("username1").userDetail(UserDetail.builder().connection(Connection.builder().id(1L).build()).build()).build();
+        var userToConnect1 = User.builder().id(1L).username("username2").userDetail(UserDetail.builder().connection(Connection.builder().id(1L).build()).build()).build();
+        var userToConnect2 = User.builder().id(3L).username("username3").userDetail(UserDetail.builder().connection(Connection.builder().id(1L).build()).build()).build();
         var connectionToDelete = Connection.builder().id(1L).user1(userToConnect1).user2(userToConnect2).connectionStatus(new ConnectionStatus(1L, "CONNECTED")).build();
 
         when(userService.getCurrentUser()).thenReturn(loggedInUser);
@@ -223,8 +224,8 @@ class ConnectionServiceTest {
 
     @Test
     public void getCurrentConnectionTest() {
-        var currentUser = User.builder().id(2L).username("username1").connection(null).build();
-        var partnerUser = User.builder().id(1L).username("username2").connection(null).build();
+        var currentUser = User.builder().id(2L).username("username1").userDetail(UserDetail.builder().connection(Connection.builder().id(1L).build()).build()).build();
+        var partnerUser = User.builder().id(1L).username("username2").userDetail(UserDetail.builder().connection(Connection.builder().id(1L).build()).build()).build();
         var connection = Connection.builder()
                 .id(1L)
                 .user1(currentUser)
@@ -233,7 +234,7 @@ class ConnectionServiceTest {
                 .created_at(LocalDateTime.MAX)
                 .build();
 
-        currentUser.setConnection(connection);
+        currentUser.setUserDetail(UserDetail.builder().connection(connection).build());
 
         when(userService.getCurrentUser()).thenReturn(currentUser);
 
@@ -248,7 +249,7 @@ class ConnectionServiceTest {
 
     @Test
     public void getCurrentConnectionNoCurrentConnectionTest() {
-        var currentUser = User.builder().id(2L).username("username1").connection(null).build();
+        var currentUser = User.builder().id(2L).username("username1").userDetail(UserDetail.builder().connection(Connection.builder().id(null).build()).build()).build();
 
         when(userService.getCurrentUser()).thenReturn(currentUser);
 

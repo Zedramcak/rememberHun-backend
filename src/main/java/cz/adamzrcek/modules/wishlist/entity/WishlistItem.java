@@ -1,12 +1,16 @@
-package cz.adamzrcek.entity;
+package cz.adamzrcek.modules.wishlist.entity;
+
 
 import cz.adamzrcek.config.EncryptDecryptConverter;
+import cz.adamzrcek.entity.User;
+import cz.adamzrcek.entity.WishlistCategory;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,6 +19,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
@@ -24,23 +29,29 @@ import java.time.LocalDateTime;
 @Builder
 @Getter
 @Setter
-public class Preference {
+@EntityListeners(AuditingEntityListener.class)
+public class WishlistItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private User user;
-
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private PreferenceCategory category;
+    @Convert(converter = EncryptDecryptConverter.class)
+    private String title;
 
     @Convert(converter = EncryptDecryptConverter.class)
-    private String value;
+    private String description;
+
+    private boolean fulfilled = false;
+
+    @ManyToOne
+    private WishlistCategory category;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime lastUpdateAt;
+
 }

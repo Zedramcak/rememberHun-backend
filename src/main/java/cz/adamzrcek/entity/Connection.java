@@ -13,6 +13,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -38,6 +39,9 @@ public class Connection {
 
     @CreationTimestamp
     private LocalDateTime created_at;
+
+    @UpdateTimestamp
+    private LocalDateTime last_update_at;
 
     @ManyToOne
     @JoinColumn(name = "connection_status_id")

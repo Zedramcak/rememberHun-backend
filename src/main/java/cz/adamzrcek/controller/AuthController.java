@@ -5,8 +5,6 @@ import cz.adamzrcek.dtos.authorization.AuthResponse;
 import cz.adamzrcek.dtos.authorization.LoginRequest;
 import cz.adamzrcek.dtos.authorization.RegisterRequest;
 import cz.adamzrcek.dtos.authorization.TokenRefreshRequest;
-import cz.adamzrcek.security.JwtBlacklist;
-import cz.adamzrcek.security.JwtUtil;
 import cz.adamzrcek.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -28,8 +26,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthService authService;
-    private final JwtUtil jwtUtil;
-    private final JwtBlacklist jwtBlacklist;
 
     @Operation(summary = "Register new user", responses = {
             @ApiResponse(responseCode = "200", description = "OK"),

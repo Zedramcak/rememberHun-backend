@@ -1,6 +1,9 @@
 package cz.adamzrcek.service.impl;
 
 import cz.adamzrcek.entity.User;
+import cz.adamzrcek.entity.UserDetail;
+import cz.adamzrcek.exception.ResourceNotFoundException;
+import cz.adamzrcek.repository.UserDetailRepository;
 import cz.adamzrcek.repository.UserRepository;
 import cz.adamzrcek.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -13,17 +16,23 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final UserDetailRepository userDetailRepository;
 
     @Override
     public User getCurrentUser(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
+        User currentUser = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User with email address " + email + " not found"));
+        currentUser.setUserDetail(userDetailRepository.findById(currentUser.getUserDetail().getId()).orElseThrow(() -> new ResourceNotFoundException("UserDetail for user " + currentUser.getId() + " not found")));
 
-        return userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User with email address " + email + " not found"));
+        return currentUser;
     }
 
     @Override
     public User getUserById(Long id){
-        return userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User with id " + id + " not found"));
+        User user = userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User with id " + id + " not found"));
+        UserDetail userDetail = userDetailRepository.findById(user.getUserDetail().getId()).orElseThrow(() -> new ResourceNotFoundException("UserDetail for user " + user.getId() + " not found"));
+        user.setUserDetail(userDetail);
+        return user;
     }
 }

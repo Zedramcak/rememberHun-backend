@@ -5,10 +5,12 @@ import cz.adamzrcek.dtos.authorization.LoginRequest;
 import cz.adamzrcek.dtos.authorization.RegisterRequest;
 import cz.adamzrcek.dtos.authorization.TokenRefreshRequest;
 import cz.adamzrcek.entity.User;
+import cz.adamzrcek.entity.UserDetail;
 import cz.adamzrcek.exception.EmailAlreadyExistsException;
 import cz.adamzrcek.exception.InvalidPasswordException;
 import cz.adamzrcek.exception.UserNotFoundException;
 import cz.adamzrcek.repository.RoleRepository;
+import cz.adamzrcek.repository.UserDetailRepository;
 import cz.adamzrcek.repository.UserRepository;
 import cz.adamzrcek.security.JwtBlacklist;
 import cz.adamzrcek.security.JwtUtil;
@@ -30,26 +32,38 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
     private final JwtBlacklist jwtBlacklist;
+    private final UserDetailRepository userDetailRepository;
 
     @Override
     public void register(RegisterRequest registerRequest) {
         if (userRepository.findByEmail(registerRequest.getEmail()).isPresent()) {
             throw new EmailAlreadyExistsException("email already exists");
         }
+        if (userRepository.findByUsernameIgnoreCase(registerRequest.getUsername()).isPresent()) {
+            throw new EmailAlreadyExistsException("username already exists");
+        }
 
         User user = User.builder()
                 .username(registerRequest.getUsername())
                 .email(registerRequest.getEmail())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
-                .firstName(registerRequest.getFirstName())
-                .lastName(registerRequest.getLastName())
-                .birthDate(registerRequest.getBirthDate())
+                .userDetail(addUserDetail(registerRequest))
                 .role(roleRepository.findByName("USER"))
                 .build();
 
         userRepository.save(user);
 
         log.debug("User {} registered successfully", user.getUsername());
+    }
+
+    private UserDetail addUserDetail(RegisterRequest registerRequest) {
+        UserDetail userDetail = UserDetail.builder()
+                .lastName(registerRequest.getLastName())
+                .firstName(registerRequest.getFirstName())
+                .birthDate(registerRequest.getBirthDate())
+                .build();
+
+        return userDetailRepository.save(userDetail);
     }
 
     @Override

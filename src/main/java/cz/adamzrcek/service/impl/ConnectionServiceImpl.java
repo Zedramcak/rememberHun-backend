@@ -8,6 +8,7 @@ import cz.adamzrcek.dtos.connection.ConnectionSignedUserResponse;
 import cz.adamzrcek.dtos.user.UserDto;
 import cz.adamzrcek.entity.Connection;
 import cz.adamzrcek.entity.User;
+import cz.adamzrcek.entity.UserDetail;
 import cz.adamzrcek.exception.ConnectionNotFoundException;
 import cz.adamzrcek.exception.NotAllowedException;
 import cz.adamzrcek.repository.ConnectionRepository;
@@ -19,6 +20,8 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 @Service
 @Slf4j
@@ -72,7 +75,7 @@ public class ConnectionServiceImpl implements ConnectionService {
     }
 
     private UserDto toUserDto(User user) {
-        return new UserDto(user.getId(), user.getUsername(), user.getEmail(), null, null);
+        return new UserDto(user.getId(), user.getUsername(), user.getEmail(), user.getUserDetail().getFirstName(), user.getUserDetail().getLastName());
     }
 
     @Transactional
@@ -91,10 +94,10 @@ public class ConnectionServiceImpl implements ConnectionService {
 
         log.debug("User {} accepted connection with id {}", currentUser.getId(), connection.getId());
 
-        currentUser.setConnection(connection);
+        currentUser.getUserDetail().setConnection(connection);
 
         User userToConnect = connection.getUser1();
-        userToConnect.setConnection(connection);
+        userToConnect.getUserDetail().setConnection(connection);
 
         userRepository.save(userToConnect);
         userRepository.save(currentUser);
@@ -121,11 +124,11 @@ public class ConnectionServiceImpl implements ConnectionService {
 
         connection.setConnectionStatus(connectionStatusRepository.findByStatus("DELETED"));
 
-        currentUser.setConnection(null);
+        currentUser.getUserDetail().setConnection(null);
         userRepository.save(currentUser);
 
         User secondUser = connection.getUser1().equals(currentUser) ? connection.getUser2() : connection.getUser1();
-        secondUser.setConnection(null);
+        secondUser.getUserDetail().setConnection(null);
         userRepository.save(secondUser);
 
         log.debug("User {} and {} are disconnected", currentUser.getId(), secondUser.getId());
@@ -139,11 +142,11 @@ public class ConnectionServiceImpl implements ConnectionService {
     public ConnectionSignedUserResponse getCurrentConnection() {
         User currentUser = userService.getCurrentUser();
         log.debug("User {} requested current connection", currentUser.getId());
-        if (currentUser.getConnection() == null) {
+        if (currentUser.getUserDetail().getConnection() == null) {
             return null;
         }
 
-        Connection connection = currentUser.getConnection();
+        Connection connection = currentUser.getUserDetail().getConnection();
         log.debug("User {} has current connection with id {}", currentUser.getId(), connection.getId());
         return new ConnectionSignedUserResponse(
                 connection.getId(),

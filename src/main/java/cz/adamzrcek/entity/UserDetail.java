@@ -13,10 +13,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @NoArgsConstructor
@@ -24,23 +22,17 @@ import java.time.LocalDateTime;
 @Builder
 @Getter
 @Setter
-public class Preference {
+public class UserDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private User user;
-
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private PreferenceCategory category;
-
     @Convert(converter = EncryptDecryptConverter.class)
-    private String value;
-
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-    @UpdateTimestamp
-    private LocalDateTime lastUpdateAt;
+    private String firstName;
+    @Convert(converter = EncryptDecryptConverter.class)
+    private String lastName;
+    private LocalDate birthDate;
+    @ManyToOne
+    @JoinColumn(name = "connection_id")
+    private Connection connection;
 }

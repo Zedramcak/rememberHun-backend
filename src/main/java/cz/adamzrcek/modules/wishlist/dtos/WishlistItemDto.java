@@ -1,4 +1,4 @@
-package cz.adamzrcek.dtos.wishlistItem;
+package cz.adamzrcek.modules.wishlist.dtos;
 
 import java.time.LocalDateTime;
 

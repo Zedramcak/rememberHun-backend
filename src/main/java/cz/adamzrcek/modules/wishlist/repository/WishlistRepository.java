@@ -1,7 +1,7 @@
-package cz.adamzrcek.repository;
+package cz.adamzrcek.modules.wishlist.repository;
 
 import cz.adamzrcek.entity.User;
-import cz.adamzrcek.entity.WishlistItem;
+import cz.adamzrcek.modules.wishlist.entity.WishlistItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

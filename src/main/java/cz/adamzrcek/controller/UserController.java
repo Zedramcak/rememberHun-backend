@@ -32,9 +32,9 @@ public class UserController {
                 user.getUsername(),
                 user.getEmail(),
                 user.getRole().getName(),
-                user.getFirstName(),
-                user.getLastName(),
-                user.getBirthDate()
+                user.getUserDetail().getFirstName(),
+                user.getUserDetail().getLastName(),
+                user.getUserDetail().getBirthDate()
         );
 
         return ResponseEntity.ok(response);

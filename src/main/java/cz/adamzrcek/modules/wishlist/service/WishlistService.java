@@ -1,7 +1,7 @@
-package cz.adamzrcek.service;
+package cz.adamzrcek.modules.wishlist.service;
 
-import cz.adamzrcek.dtos.wishlistItem.WishlistItemDto;
-import cz.adamzrcek.dtos.wishlistItem.WishlistItemRequest;
+import cz.adamzrcek.modules.wishlist.dtos.WishlistItemDto;
+import cz.adamzrcek.modules.wishlist.dtos.WishlistItemRequest;
 
 import java.util.List;
 

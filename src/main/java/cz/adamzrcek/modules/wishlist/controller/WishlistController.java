@@ -1,8 +1,8 @@
-package cz.adamzrcek.controller;
+package cz.adamzrcek.modules.wishlist.controller;
 
-import cz.adamzrcek.dtos.wishlistItem.WishlistItemDto;
-import cz.adamzrcek.dtos.wishlistItem.WishlistItemRequest;
-import cz.adamzrcek.service.WishlistService;
+import cz.adamzrcek.modules.wishlist.dtos.WishlistItemDto;
+import cz.adamzrcek.modules.wishlist.dtos.WishlistItemRequest;
+import cz.adamzrcek.modules.wishlist.service.WishlistService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.ResponseEntity;

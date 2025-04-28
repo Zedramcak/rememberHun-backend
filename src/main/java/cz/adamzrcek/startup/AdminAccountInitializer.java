@@ -1,7 +1,9 @@
 package cz.adamzrcek.startup;
 
 import cz.adamzrcek.entity.User;
+import cz.adamzrcek.entity.UserDetail;
 import cz.adamzrcek.repository.RoleRepository;
+import cz.adamzrcek.repository.UserDetailRepository;
 import cz.adamzrcek.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +11,9 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDate;
+import java.time.Month;
 
 @Component
 @RequiredArgsConstructor
@@ -18,6 +23,7 @@ public class AdminAccountInitializer {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
+    private final UserDetailRepository userDetailRepository;
 
     @Value("${ADMIN_EMAIL}")
     private String adminEmail;
@@ -39,11 +45,17 @@ public class AdminAccountInitializer {
                     .password(passwordEncoder.encode(adminPassword))
                     .username(adminUsername)
                     .role(roleRepository.findByName(adminRole))
+                    .userDetail(createAdminUserDetail())
                     .build();
             userRepository.save(admin);
             log.info("✅ Default admin account created (email: {})", adminEmail);
         } else {
             log.info("👀 Admin account already exists. Skipping creation.");
         }
+    }
+
+    private UserDetail createAdminUserDetail() {
+        var adminUserDetail = UserDetail.builder().firstName("admin").lastName("admin").birthDate(LocalDate.of(1991, Month.DECEMBER, 17)).build();
+        return userDetailRepository.save(adminUserDetail);
     }
 }
