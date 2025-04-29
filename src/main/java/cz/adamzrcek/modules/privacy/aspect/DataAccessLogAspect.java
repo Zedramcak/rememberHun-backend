@@ -4,7 +4,6 @@ import cz.adamzrcek.modules.auth.security.model.CustomUserPrincipal;
 import cz.adamzrcek.modules.privacy.annotation.LogRepository;
 import cz.adamzrcek.modules.privacy.entity.DataAccessLogs;
 import cz.adamzrcek.modules.privacy.repository.DataAccessLogsRepository;
-import cz.adamzrcek.modules.user.entity.User;
 import cz.adamzrcek.modules.user.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +30,6 @@ import java.util.*;
 public class DataAccessLogAspect {
 
     private final DataAccessLogsRepository dataAccessLogsRepository;
-    private final UserRepository userRepository;
 
     private static final ThreadLocal<Boolean> currentlyLogging = ThreadLocal.withInitial(() -> false);
 
