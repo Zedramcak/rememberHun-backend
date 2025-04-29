@@ -1,5 +1,6 @@
 package cz.adamzrcek.modules.auth.security;
 
+import cz.adamzrcek.modules.auth.security.model.CustomUserPrincipal;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -51,10 +52,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             final Claims claims = jwtUtil.getClaimsFromToken(jwt);
             final String role = claims.get("role", String.class);
             final String email = claims.getSubject();
+            final Long userId = claims.get("id", Long.class);
 
             // Set up authentication in SecurityContext
             List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + role));
-            Authentication authentication = new UsernamePasswordAuthenticationToken(email, null, authorities);
+            CustomUserPrincipal principal = new CustomUserPrincipal(userId, email);
+            Authentication authentication = new UsernamePasswordAuthenticationToken(principal, null, authorities);
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
         } catch (ExpiredJwtException e) {

@@ -38,11 +38,11 @@ The application follows a layered architecture:
 ### Environment Setup
 1. Clone the repository:
 ``` bash
-   git clone https://github.com/yourusername/rememberHun-backend.git
+   git clone https://github.com/Zedramcak/rememberHun-backend.git
    cd rememberHun-backend
 ```
 1. Configure environment variables:
-    - Create a file based on the example provided in `.env.example` `.env`
+    - Create a file based on the example provided in `.env`
     - Set your database credentials and JWT secret
 
 2. Build the application:

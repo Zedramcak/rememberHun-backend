@@ -89,7 +89,7 @@ class AuthServiceTest {
 
         given(userRepository.findByUsernameIgnoreCase(anyString())).willReturn(Optional.of(user));
         given(passwordEncoder.matches(anyString(), anyString())).willReturn(true);
-        given(jwtUtil.generateToken(anyString(), anyString())).willReturn("token");
+        given(jwtUtil.generateToken(anyLong(), anyString(), anyString())).willReturn("token");
         given(jwtUtil.generateRefreshToken(anyString())).willReturn("refreshToken");
 
         var response = authService.login(loginRequest);
@@ -114,7 +114,7 @@ class AuthServiceTest {
 
         given(userRepository.findByEmail(anyString())).willReturn(Optional.of(user));
         given(passwordEncoder.matches(anyString(), anyString())).willReturn(true);
-        given(jwtUtil.generateToken(anyString(), anyString())).willReturn("token");
+        given(jwtUtil.generateToken(anyLong(), anyString(), anyString())).willReturn("token");
         given(jwtUtil.generateRefreshToken(anyString())).willReturn("refreshToken");
 
         var response = authService.login(loginRequest);
@@ -140,7 +140,7 @@ class AuthServiceTest {
 
         verify(userRepository, never()).findByEmail(anyString());
         verify(passwordEncoder, never()).matches(anyString(), anyString());
-        verify(jwtUtil, never()).generateToken(anyString(), anyString());
+        verify(jwtUtil, never()).generateToken(anyLong(), anyString(), anyString());
         verify(jwtUtil, never()).generateRefreshToken(anyString());
         verify(jwtUtil, never()).extractEmail(anyString());
         verify(jwtUtil, never()).isTokenExpired(anyString());
@@ -156,7 +156,7 @@ class AuthServiceTest {
         assertThrows(InvalidPasswordException.class, () -> authService.login(loginRequest));
         verify(userRepository, never()).findByEmail(anyString());
         verify(passwordEncoder, atMostOnce()).matches(anyString(), anyString());
-        verify(jwtUtil, never()).generateToken(anyString(), anyString());
+        verify(jwtUtil, never()).generateToken(anyLong(), anyString(), anyString());
         verify(jwtUtil, never()).generateRefreshToken(anyString());
         verify(jwtUtil, never()).extractEmail(anyString());
         verify(jwtUtil, never()).isTokenExpired(anyString());
@@ -172,7 +172,7 @@ class AuthServiceTest {
         given(jwtUtil.extractEmail(anyString())).willReturn(email);
         given(userRepository.findByEmail(anyString())).willReturn(Optional.of(user));
 
-        given(jwtUtil.generateToken(anyString(), anyString())).willReturn("token");
+        given(jwtUtil.generateToken(anyLong(), anyString(), anyString())).willReturn("token");
         given(jwtUtil.generateRefreshToken(anyString())).willReturn("refreshToken");
 
         var response = authService.refreshToken(request);

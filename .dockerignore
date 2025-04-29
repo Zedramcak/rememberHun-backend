@@ -1,0 +1,24 @@
+# Maven files
+target/
+!.mvn/wrapper/maven-wrapper.jar
+.mvn/
+pom.xml
+*.iml
+
+# Logs
+*.log
+
+# IntelliJ and other IDEs
+.idea/
+*.sw?
+*.class
+
+# OS/system junk
+.DS_Store
+Thumbs.db
+
+# Git stuff
+.git
+.gitignore
+
+directory-structure.txt

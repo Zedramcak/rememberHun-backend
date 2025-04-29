@@ -8,8 +8,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,6 +29,13 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(indexes = {
+        @Index(columnList = "category_id", name = "category_id_idx"),
+        @Index(columnList = "connection_id", name = "connection_id_idx"),
+        @Index(columnList = "date", name = "date_idx"),
+        @Index(columnList = "date, category_id", name = "date_category_id_idx"),
+        @Index(columnList = "should_be_notified", name = "should_be_notified_idx")
+})
 public class ImportantDate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

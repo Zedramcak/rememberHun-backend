@@ -24,7 +24,7 @@ public class JwtUtil {
         key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
     }
 
-    public String generateToken(String email, String role) {
+    public String generateToken(Long userId, String email, String role) {
 
         String tokenId = UUID.randomUUID().toString();
 
@@ -32,6 +32,7 @@ public class JwtUtil {
                 .setSubject(email)
                 .claim("role", role)
                 .claim("email", email)
+                .claim("id", userId)
                 .setId(tokenId)
                 .setIssuer("rememberHun-api")
                 .setIssuedAt(new Date(System.currentTimeMillis()))
@@ -60,6 +61,18 @@ public class JwtUtil {
     public String extractEmail(String token) {
         return getClaimsFromToken(token).getSubject();
 
+    }
+
+    public Long extractId(String token) {
+        Object id = getClaimsFromToken(token).get("id");
+        if (id instanceof Integer) {
+            return ((Integer) id).longValue();
+        } else if (id instanceof Long) {
+            return (Long) id;
+        } else if (id instanceof String) {
+            return Long.parseLong((String) id);
+        }
+        return null;
     }
 
     public String extractRole(String token) {

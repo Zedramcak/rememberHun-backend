@@ -24,6 +24,9 @@ RUN ./mvnw package -DskipTests
 # Create the final image with minimal dependencies
 FROM eclipse-temurin:21-jre-jammy
 
+RUN addgroup --system appgroup && adduser --system --group appuser
+USER appuser:appgroup
+
 # Set working directory
 WORKDIR /app
 
@@ -37,4 +40,4 @@ EXPOSE 8080
 ENV SPRING_PROFILES_ACTIVE=prod
 
 # Run the application
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+ENTRYPOINT ["java", "-XX:+UseContainerSupport", "-XX:MaxRAMPercentage=75.0", "-Djava.security.egd=file:/dev/./urandom", "-jar", "/app/app.jar"]

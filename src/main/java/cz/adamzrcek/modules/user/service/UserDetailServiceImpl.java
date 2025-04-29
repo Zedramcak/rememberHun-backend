@@ -1,6 +1,5 @@
 package cz.adamzrcek.modules.user.service;
 
-import cz.adamzrcek.modules.privacy.annotation.LogDataAccess;
 import cz.adamzrcek.modules.shared.exception.ResourceNotFoundException;
 import cz.adamzrcek.modules.user.entity.UserDetail;
 import cz.adamzrcek.modules.user.repository.UserDetailRepository;
@@ -13,7 +12,6 @@ public class UserDetailServiceImpl implements UserDetailService {
     private final UserDetailRepository userDetailRepository;
 
     @Override
-    @LogDataAccess(entity = "userDetail")
     public UserDetail getUserDetail(Long userId) {
         return userDetailRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("UserDetail for user " + userId + " not found"));
     }

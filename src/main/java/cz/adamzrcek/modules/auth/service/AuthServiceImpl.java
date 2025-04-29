@@ -81,7 +81,7 @@ public class AuthServiceImpl implements AuthService {
             throw new InvalidPasswordException("Invalid password");
         }
 
-        String token = jwtUtil.generateToken(user.getEmail(), user.getRole().getName());
+        String token = jwtUtil.generateToken(user.getId(), user.getEmail(), user.getRole().getName());
         String refreshToken = jwtUtil.generateRefreshToken(user.getEmail());
         log.debug("User {} logged in", user.getUsername());
         return AuthResponse.builder()
@@ -104,7 +104,7 @@ public class AuthServiceImpl implements AuthService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
-        String newAccessToken = jwtUtil.generateToken(user.getEmail(), user.getRole().getName());
+        String newAccessToken = jwtUtil.generateToken(user.getId(), user.getEmail(), user.getRole().getName());
         String newRefreshToken = jwtUtil.generateRefreshToken(user.getEmail());
 
         log.debug("User {} refreshed token", user.getUsername());

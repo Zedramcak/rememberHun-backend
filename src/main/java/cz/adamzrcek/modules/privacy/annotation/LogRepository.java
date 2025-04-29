@@ -5,9 +5,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target(ElementType.METHOD)
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface LogDataAccess {
-    String action() default "READ";
-    String entity();
+public @interface LogRepository {
+    String entityType();
+    String[] excludedMethods() default {};
 }
