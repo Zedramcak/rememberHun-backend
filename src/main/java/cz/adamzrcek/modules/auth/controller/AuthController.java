@@ -45,6 +45,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
         AuthResponse response = authService.login(request);
+        log.info("😎 User logged in");
         return ResponseEntity.ok(response);
     }
 
@@ -65,6 +66,7 @@ public class AuthController {
             String token = authHeader.substring(7);
             authService.logout(token);
         }
+        log.info("😎 User logged out");
         return ResponseEntity.ok().build();
     }
 

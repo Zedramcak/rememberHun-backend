@@ -1,5 +1,6 @@
 package cz.adamzrcek.modules.auth.security;
 
+import cz.adamzrcek.modules.auth.exception.ExpiredTokenException;
 import cz.adamzrcek.modules.auth.security.model.CustomUserPrincipal;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -62,8 +63,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         } catch (ExpiredJwtException e) {
             log.warn("JWT token is expired: {}", e.getMessage());
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "JWT token has expired");
-            return;
+            throw new ExpiredTokenException("JWT token has expired");
         } catch (MalformedJwtException e) {
             log.warn("Invalid JWT token: {}", e.getMessage());
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid JWT token");
