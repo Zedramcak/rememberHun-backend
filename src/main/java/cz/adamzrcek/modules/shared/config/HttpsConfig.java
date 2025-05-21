@@ -17,9 +17,7 @@ public class HttpsConfig {
     @Bean
     @Profile("!test")
     public WebServerFactoryCustomizer<TomcatServletWebServerFactory> servletContainerCustomizer() {
-        return container -> {
-            container.addAdditionalTomcatConnectors(redirectConnector());
-        };
+        return container -> container.addAdditionalTomcatConnectors(redirectConnector());
     }
 
     private Connector redirectConnector() {

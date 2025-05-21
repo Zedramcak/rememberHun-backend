@@ -1,20 +1,6 @@
 # RememberHun Backend
 A Spring Boot application serving as the backend for the RememberHun application, designed to help users manage connections, important dates, preferences, and wishlists.
 
-## Table of Contents
-
-- [Features](#features)
-- [Technology Stack](#technology-stack)
-- [Architecture](#architecture)
-- [Getting Started](#getting-started)
-- [API Documentation](#api-documentation)
-- [Testing](#testing)
-- [Project Structure](#project-structure)
-- [Security](#security)
-- [Roadmap](#roadmap)
-- [Contributing](#contributing)
-- [License](#license)
-- [Authors](#authors)
 
 
 ## 🌟 Features
