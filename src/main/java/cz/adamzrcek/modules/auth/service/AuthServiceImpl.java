@@ -71,10 +71,10 @@ public class AuthServiceImpl implements AuthService {
 
         if (request.getIdentifier().contains("@")) {
             user = userRepository.findByEmail(request.getIdentifier())
-                    .orElseThrow(() -> new UserNotFoundException("User not found"));
+                    .orElseThrow(() -> new UserNotFoundException("User does not exists"));
         }else {
             user = userRepository.findByUsernameIgnoreCase(request.getIdentifier())
-                    .orElseThrow(() -> new UserNotFoundException("User not found"));
+                    .orElseThrow(() -> new UserNotFoundException("User does not exists"));
         }
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {

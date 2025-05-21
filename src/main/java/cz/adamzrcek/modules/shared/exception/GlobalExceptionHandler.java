@@ -2,6 +2,7 @@ package cz.adamzrcek.modules.shared.exception;
 
 import cz.adamzrcek.modules.shared.dtos.ErrorResponse;
 import cz.adamzrcek.modules.auth.exception.EmailAlreadyExistsException;
+import cz.adamzrcek.modules.auth.exception.ExpiredTokenException;
 import cz.adamzrcek.modules.auth.exception.InvalidPasswordException;
 import cz.adamzrcek.modules.auth.exception.NotAllowedException;
 import lombok.extern.slf4j.Slf4j;
@@ -93,6 +94,18 @@ public class GlobalExceptionHandler {
                 .timestamp(LocalDateTime.now())
                 .build();
         return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(ExpiredTokenException.class)
+    public ResponseEntity<ErrorResponse> handleExpiredTokenException(ExpiredTokenException ex){
+        log.error("🔒 Token expired: {}", ex.getMessage());
+        ErrorResponse response = ErrorResponse
+                .builder()
+                .code("token-expired")
+                .message(ex.getMessage())
+                .timestamp(LocalDateTime.now())
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(Exception.class)

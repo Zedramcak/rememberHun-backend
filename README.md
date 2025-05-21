@@ -1,12 +1,31 @@
 # RememberHun Backend
 A Spring Boot application serving as the backend for the RememberHun application, designed to help users manage connections, important dates, preferences, and wishlists.
+
+## Table of Contents
+
+- [Features](#features)
+- [Technology Stack](#technology-stack)
+- [Architecture](#architecture)
+- [Getting Started](#getting-started)
+- [API Documentation](#api-documentation)
+- [Testing](#testing)
+- [Project Structure](#project-structure)
+- [Security](#security)
+- [Roadmap](#roadmap)
+- [Contributing](#contributing)
+- [License](#license)
+- [Authors](#authors)
+
+
 ## 🌟 Features
-- : JWT-based authentication with token refresh capabilities **Authentication**
+- **Authentication**: JWT-based authentication with token refresh capabilities
 - **User Management**: User registration, profile management
 - **Connections**: Create and manage connections between users
 - **Important Dates**: Track and manage important dates with notifications
 - **Preferences**: Store and retrieve user preferences
 - **Wishlists**: Create and manage wishlists
+- **Privacy Settings**: Control user data visibility and sharing preferences
+- **Reference Data**: Manage common reference data used throughout the application
 
 ## 🛠️ Technology Stack
 - **Java 21**: Latest LTS version of Java
@@ -20,7 +39,8 @@ A Spring Boot application serving as the backend for the RememberHun application
 - **Swagger/OpenAPI**: API documentation
 
 ## 🏗️ Architecture
-The application follows a layered architecture:
+The application follows a modular architecture:
+- **Module-Based Design**: Functionality organized into domain-specific modules
 - **Controller Layer**: RESTful API endpoints
 - **Service Layer**: Business logic implementation with interfaces for better testability
 - **Repository Layer**: Data access
@@ -37,66 +57,70 @@ The application follows a layered architecture:
 
 ### Environment Setup
 1. Clone the repository:
-``` bash
-   git clone https://github.com/Zedramcak/rememberHun-backend.git
-   cd rememberHun-backend
+```bash 
+git clone [https://github.com/Zedramcak/rememberHun-backend.git](https://github.com/Zedramcak/rememberHun-backend.git) 
+cd rememberHun-backend
 ```
-1. Configure environment variables:
-    - Create a file based on the example provided in `.env`
-    - Set your database credentials and JWT secret
+2. Configure environment variables:
+   - Create a file based on the example provided in `.env`
+   - Set your database credentials and JWT secret
 
-2. Build the application:
-``` bash
-   ./mvnw clean package
+3. Build the application:
+```bash 
+./mvnw clean package
 ```
 ### Running Locally
 #### Using Maven
-``` bash
+```bash 
 ./mvnw spring-boot:run -Dspring.profiles.active=dev
 ```
 #### Using Docker
-``` bash
+```bash 
 docker-compose -f docker-compose.dev.yml up -d
 ```
 ### Deployment
 For production deployment:
-``` bash
-./dev.sh  # Script to build and deploy to production
+```bash 
+./dev.sh # Script to build and deploy to production
 ```
 Or using Docker:
-``` bash
+```bash 
 docker-compose -f docker-compose.prod.yml up -d
 ```
 ## 📊 API Documentation
 API documentation is available via Swagger UI:
 - Development: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
-- Production: [https://api.rememberhun.com/swagger-ui.html](https://api.rememberhun.com/swagger-ui.html)
-
 ## 🧪 Testing
 Run tests with:
-``` bash
+```bash 
 ./mvnw test
 ```
 ## 📂 Project Structure
-``` 
-src
-├── main
-│   ├── java
-│   │   └── cz.adamzrcek
-│   │       ├── config        # Configuration classes
-│   │       ├── controller    # REST controllers
-│   │       ├── dtos          # Data Transfer Objects
-│   │       ├── entity        # JPA entities
-│   │       ├── exception     # Custom exceptions
-│   │       ├── repository    # Spring Data repositories
-│   │       ├── security      # Security-related classes
-│   │       ├── service       # Service interfaces
-│   │       │   └── impl      # Service implementations
-│   │       └── startup       # Startup initialization
-│   └── resources
-│       ├── db.migration      # Flyway database migrations
-│       └── application.properties
-└── test                      # Test classes
+```
+src 
+├── main 
+│ ├── java 
+│ │ └── cz.adamzrcek 
+│ │ ├── modules # Modular organization 
+│ │ │ ├── auth # Authentication module 
+│ │ │ ├── connection # User connections module 
+│ │ │ ├── importantdate # Important dates module 
+│ │ │ ├── preference # User preferences module 
+│ │ │ ├── privacy # Privacy settings module 
+│ │ │ ├── referencedata # Reference data module 
+│ │ │ ├── shared # Shared components 
+│ │ │ │ ├── config # Configuration classes 
+│ │ │ │ ├── controller # Common controllers 
+│ │ │ │ ├── dtos # Shared DTOs 
+│ │ │ │ ├── exception # Global exception handling 
+│ │ │ │ └── startup # Startup initialization 
+│ │ │ ├── user # User management module 
+│ │ │ └── wishlist # Wishlist module 
+│ │ └── RememberHunApplication # Application entry point 
+│ └── resources 
+│ ├── db.migration # Flyway database migrations 
+│ └── application.properties # Application configuration 
+└── test # Test classes
 ```
 ## 🔒 Security
 The application uses JWT tokens for authentication:
@@ -106,10 +130,8 @@ The application uses JWT tokens for authentication:
 
 ## 🛣️ Roadmap
 - [ ] Implement email notifications for important dates
-- [ ] Add OAuth2 authentication providers
 - [ ] Implement rate limiting
 - [ ] Add metrics and monitoring
-- [ ] Containerize with Kubernetes deployment
 
 ## 🤝 Contributing
 1. Fork the repository
@@ -120,6 +142,7 @@ The application uses JWT tokens for authentication:
 
 ## 📝 License
 This project is licensed under the MIT License - see the LICENSE file for details.
+
 ## 👥 Authors
 - **Adam Zrcek** - _Initial work_
 
