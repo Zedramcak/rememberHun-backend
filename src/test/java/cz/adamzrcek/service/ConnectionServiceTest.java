@@ -5,7 +5,7 @@ import cz.adamzrcek.modules.connection.dtos.ConnectionDeleteRequest;
 import cz.adamzrcek.modules.connection.dtos.ConnectionNewRequest;
 import cz.adamzrcek.modules.connection.entity.Connection;
 import cz.adamzrcek.modules.referencedata.entity.ConnectionStatus;
-import cz.adamzrcek.modules.connection.service.ConnectionService;
+import cz.adamzrcek.modules.connection.service.ConnectionServiceImpl;
 import cz.adamzrcek.modules.user.entity.User;
 import cz.adamzrcek.modules.user.entity.UserDetail;
 import cz.adamzrcek.modules.connection.exception.ConnectionNotFoundException;
@@ -33,7 +33,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class ConnectionServiceTest {
     @InjectMocks
-    private ConnectionService connectionService;
+    private ConnectionServiceImpl connectionService;
 
     @Mock
     private UserService userService;
@@ -251,7 +251,7 @@ class ConnectionServiceTest {
 
     @Test
     public void getCurrentConnectionNoCurrentConnectionTest() {
-        var currentUser = User.builder().id(2L).username("username1").userDetail(UserDetail.builder().connection(Connection.builder().id(null).build()).build()).build();
+        var currentUser = User.builder().id(2L).username("username1").userDetail(UserDetail.builder().connection(null).build()).build();
 
         when(userService.getCurrentUser()).thenReturn(currentUser);
 

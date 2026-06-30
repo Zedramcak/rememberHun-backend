@@ -4,7 +4,7 @@ import cz.adamzrcek.modules.preference.dtos.PreferenceDto;
 import cz.adamzrcek.modules.preference.dtos.PreferenceNewRequest;
 import cz.adamzrcek.modules.preference.entity.Preference;
 import cz.adamzrcek.modules.referencedata.entity.PreferenceCategory;
-import cz.adamzrcek.modules.preference.service.PreferenceService;
+import cz.adamzrcek.modules.preference.service.PreferenceServiceImpl;
 import cz.adamzrcek.modules.referencedata.entity.Role;
 import cz.adamzrcek.modules.connection.service.ConnectionService;
 import cz.adamzrcek.modules.user.entity.User;
@@ -43,7 +43,7 @@ public class PreferenceServiceTest {
     private PreferenceCategoryRepository preferenceCategoryRepository;
 
     @InjectMocks
-    private PreferenceService preferenceService;
+    private PreferenceServiceImpl preferenceService;
 
     @Test
     public void getPreferenceOkTest() {
@@ -54,9 +54,8 @@ public class PreferenceServiceTest {
                 .role(new Role(1L, "USER"))
                 .build();
 
-        when(preferenceRepository.findById(any())).thenReturn(Optional.of(Preference.builder().id(id).user(currentUser).build()));
+        when(preferenceRepository.findById(any())).thenReturn(Optional.of(Preference.builder().id(id).user(currentUser).category(new PreferenceCategory(1L, "BRAND")).build()));
         when(userService.getCurrentUser()).thenReturn(currentUser);
-        given(preferenceCategoryRepository.findById(any())).willReturn(Optional.of(new PreferenceCategory(1L, "BRAND")));
 
         PreferenceDto preferenceDto = preferenceService.getPreference(id);
 

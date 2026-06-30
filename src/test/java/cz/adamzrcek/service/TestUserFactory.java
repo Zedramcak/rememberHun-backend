@@ -10,6 +10,7 @@ public class TestUserFactory {
         user.setEmail("email@email.com");
         user.setPassword("password");
         user.setRole(new Role(1L, "USER"));
+        user.setId(1L);
         return user;
     }
 }

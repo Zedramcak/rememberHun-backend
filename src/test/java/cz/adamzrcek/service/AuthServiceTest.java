@@ -4,11 +4,14 @@ import cz.adamzrcek.modules.auth.dtos.LoginRequest;
 import cz.adamzrcek.modules.auth.dtos.RegisterRequest;
 import cz.adamzrcek.modules.auth.dtos.TokenRefreshRequest;
 import cz.adamzrcek.modules.referencedata.entity.Role;
-import cz.adamzrcek.modules.auth.service.AuthService;
+import cz.adamzrcek.modules.auth.service.AuthServiceImpl;
 import cz.adamzrcek.modules.user.entity.User;
 import cz.adamzrcek.modules.auth.exception.EmailAlreadyExistsException;
 import cz.adamzrcek.modules.auth.exception.InvalidPasswordException;
 import cz.adamzrcek.modules.user.exception.UserNotFoundException;
+import cz.adamzrcek.modules.user.entity.UserDetail;
+import cz.adamzrcek.modules.user.repository.UserDetailRepository;
+import cz.adamzrcek.modules.auth.security.JwtBlacklist;
 import cz.adamzrcek.modules.referencedata.repository.RoleRepository;
 import cz.adamzrcek.modules.user.repository.UserRepository;
 import cz.adamzrcek.modules.auth.security.JwtUtil;
@@ -32,7 +35,7 @@ import static org.mockito.Mockito.*;
 class AuthServiceTest {
 
     @InjectMocks
-    private AuthService authService;
+    private AuthServiceImpl authService;
 
     @Mock
     private PasswordEncoder passwordEncoder;
@@ -46,6 +49,12 @@ class AuthServiceTest {
     @Mock
     private JwtUtil jwtUtil;
 
+    @Mock
+    private JwtBlacklist jwtBlacklist;
+
+    @Mock
+    private UserDetailRepository userDetailRepository;
+
 
     @Test
     public void userRegisterOkTest(){
@@ -53,6 +62,7 @@ class AuthServiceTest {
         given(userRepository.findByEmail(anyString())).willReturn(java.util.Optional.empty());
         given(passwordEncoder.encode(anyString())).willReturn("password");
         given(roleRepository.findByName(anyString())).willReturn(new Role(1L, "USER"));
+        given(userDetailRepository.save(any(UserDetail.class))).willAnswer(invocation -> invocation.getArgument(0));
 
         ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
 
